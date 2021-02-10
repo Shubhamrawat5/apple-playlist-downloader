@@ -1,0 +1,17 @@
+{
+  "name": "apple-music",
+  "version": "1.0.0",
+  "description": "To download apple music playlist songs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shubham Rawat",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "html-entities": "^2.1.0",
+    "jssoup": "0.0.12",
+    "progress": "^2.0.3"
+  }
+}
