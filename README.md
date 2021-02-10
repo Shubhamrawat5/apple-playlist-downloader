@@ -2,9 +2,8 @@
 
 1. clone repo
 2. npm install
-3. edit playlist url variable and set your playlist link in "apple_playlist.js" file [line 7]
+3. edit playlist url variable and set your playlist link in "apple_playlist.js" file [line 8]
 4. npm app.js
-
 
 -> Now a song folder will be created in the repo folder.
 
@@ -15,4 +14,5 @@
 -> Also there is 5% chance that song's some remix or different same name song will get downloaded...
 
 ### Screenshots
+
 <img src = "https://i.ibb.co/jGkBFN6/aaaa.png" width="500"/>

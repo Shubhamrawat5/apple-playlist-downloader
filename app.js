@@ -64,7 +64,13 @@ const getURL = async (song, singer) => {
   link = link + track.tit_art + ".mp3" + "?extra=";
   link = link + track.extra;
   link = encodeURI(link); //to replace unescaped characters from link
-  download(track.tit_art, link);
+
+  let songName = track.tit_art;
+  songName = songName = songName = songName.replace(
+    /\?|<|>|\*|"|:|\||\/|\\/g,
+    ""
+  ); //removing special characters which are not allowed in file name
+  download(songName, link);
 };
 
 const startDownloading = () => {
@@ -88,6 +94,13 @@ const startDownloading = () => {
 console.log("STARTING....");
 let playlist = require("./apple_playlist");
 playlist.getPlaylist().then((res) => {
+  if (res === "Some Error") {
+    //wrong url
+    console.log(
+      "Error: maybe the url you inserted is not of apple music playlist or check your connection!"
+    );
+    return;
+  }
   songsList = res.songs;
   total = res.total;
   console.log("Total songs:" + total);
@@ -97,6 +110,5 @@ playlist.getPlaylist().then((res) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
-
   startDownloading();
 });
