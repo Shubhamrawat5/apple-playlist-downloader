@@ -14,17 +14,19 @@ module.exports.getPlaylist = async () => {
     //scraping...
     const playlistHeaderBlock = soup.find("div", "album-header-metadata");
     let playlistName = playlistHeaderBlock.find("h1").text.trim();
-    let playlistUser = playlistHeaderBlock.find("h2").text.trim();
-    //   console.log(playlistName, playlistUser);
+    let playlistUser = playlistHeaderBlock
+      .find("div", "product-creator")
+      .text.trim();
+    // console.log(playlistName, playlistUser);
     playlistObj.playlist = htmlEntities.decode(playlistName);
     playlistObj.user = htmlEntities.decode(playlistUser);
 
-    const tracksInfo = soup.findAll("div", "track"); //finding all songs info
+    const tracksInfo = soup.findAll("div", "songs-list-row"); //finding all songs info
     playlistObj.songs = [];
 
     for (let track of tracksInfo) {
-      let songName = track.find("div", "song-name ").text;
-      let singerNames = track.find("div", "by-line").text;
+      let songName = track.find("div", "songs-list-row__song-name").text;
+      let singerNames = track.find("div", "songs-list-row__by-line").text;
       singerNames = singerNames.replace(/\s{2,10}/g, ""); //remove spaces
       songName = songName.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
       playlistObj.songs.push({

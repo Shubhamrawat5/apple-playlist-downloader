@@ -66,10 +66,7 @@ const getURL = async (song, singer) => {
   link = encodeURI(link); //to replace unescaped characters from link
 
   let songName = track.tit_art;
-  songName = songName = songName = songName.replace(
-    /\?|<|>|\*|"|:|\||\/|\\/g,
-    ""
-  ); //removing special characters which are not allowed in file name
+  songName.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
   download(songName, link);
 };
 
