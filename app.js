@@ -2,8 +2,8 @@ const fs = require("fs");
 var ProgressBar = require("progress");
 const axios = require("axios");
 
-const INFO_URL = "http://slider.kz/vk_auth.php?q=";
-const DOWNLOAD_URL = "http://slider.kz/download/";
+const INFO_URL = "https://slider.kz/vk_auth.php?q=";
+const DOWNLOAD_URL = "https://slider.kz/download/";
 let index = -1;
 let songsList = [];
 let total = 0;
