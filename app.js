@@ -51,7 +51,18 @@ const getURL = async (song, singer) => {
     return;
   }
 
-  let track = data["audios"][""][0];
+  //avoid remix,revisited,mix
+  let i = 0;
+  let track = data["audios"][""][i];
+  while (/remix|revisited|mix/i.test(track.tit_art)) {
+    i += 1;
+    track = data["audios"][""][i];
+  }
+  //if reach the end then select the first song
+  if (!track) {
+    track = data["audios"][""][0];
+  }
+
   if (fs.existsSync(__dirname + "/songs/" + track.tit_art + ".mp3")) {
     console.log(index + 1 + "- Song already present!!!!! " + song);
     startDownloading(); //next song
