@@ -41,7 +41,7 @@ const download = async (song, url) => {
 const getURL = async (song, singer) => {
   let query = (song + "%20" + singer).replace(/\s/g, "%20");
   // console.log(INFO_URL + query);
-  const { data } = await axios.get(INFO_URL + query);
+  const { data } = await axios.get(encodeURI(INFO_URL + query));
 
   if (data["audios"][""].length <= 1) {
     //no result
