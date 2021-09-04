@@ -4,15 +4,14 @@ const axios = require("axios");
 
 const INFO_URL = "https://slider.kz/vk_auth.php?q=";
 const DOWNLOAD_URL = "https://slider.kz/download/";
-let index = -1;
-let songsList = [];
-let total = 0;
-let notFound = [];
 
 const download = async (song, url) => {
   try {
-    let numb = index + 1;
-    console.log(`(${numb}/${total}) Starting download: ${song}`);
+    let numb = 1;
+    console.log(`Starting download: ${song}`);
+    console.log(url);
+    url = url.replace(/,/g, "");
+    console.log(url);
     const { data, headers } = await axios({
       method: "GET",
       url: url,
@@ -40,15 +39,17 @@ const download = async (song, url) => {
 
     //for saving in file...
     data.pipe(fs.createWriteStream(`${__dirname}/songs/${song}.mp3`));
-  } catch {
-    console.log("some error came!");
+  } catch (e) {
+    console.log("some error came!", e);
   }
 };
 
 const getURL = async (song, singer) => {
   let query = (song + "%20" + singer).replace(/\s/g, "%20");
-  // console.log(INFO_URL + query);
+  console.log(INFO_URL + query);
   const { data } = await axios.get(encodeURI(INFO_URL + query));
+
+  //   console.log(data);
 
   if (data["audios"][""].length <= 1) {
     //no result
@@ -70,11 +71,7 @@ const getURL = async (song, singer) => {
     track = data["audios"][""][0];
   }
 
-  if (fs.existsSync(__dirname + "/songs/" + track.tit_art + ".mp3")) {
-    console.log(index + 1 + "- Song already present!!!!! " + song);
-    startDownloading(); //next song
-    return;
-  }
+  console.log(track);
 
   let link = DOWNLOAD_URL + track.id + "/";
   link = link + track.duration + "/";
@@ -88,42 +85,8 @@ const getURL = async (song, singer) => {
   download(songName, link);
 };
 
-const startDownloading = () => {
-  index += 1;
-  if (index === songsList.length) {
-    console.log("\n#### ALL SONGS ARE DOWNLOADED!! ####\n");
-    console.log("Songs that are not found:-");
-    let i = 1;
-    for (let song of notFound) {
-      console.log(`${i} - ${song}`);
-      i += 1;
-    }
-    if (i === 1) console.log("None!");
-    return;
-  }
-  let song = songsList[index].name;
-  let singer = songsList[index].singer;
-  getURL(song, singer);
-};
+getURL("Кто я без тебя?", "Bahh Tee, Turken");
 
-console.log("STARTING....");
-let playlist = require("./apple_playlist");
-playlist.getPlaylist().then((res) => {
-  if (res === "Some Error") {
-    //wrong url
-    console.log(
-      "Error: maybe the url you inserted is not of apple music playlist or check your connection!"
-    );
-    return;
-  }
-  songsList = res.songs;
-  total = res.total;
-  console.log("Total songs:" + total);
+https://slider.kz/download/-2001595053_94595053/179/cs3-5v4/p2/0c4a923a13e792/Bahh%20Tee%20Turken%20-%20Кто%20я%20без%20тебя?.mp3?extra=P-UsDbiPYWd6ElugnLEQ80oOsbcDYThLihfYLch4Ykqe9l_gzDZxktIvjc7B4k8QnjctXE1zps4TajmZP_Kyi_ygNO4vq2Kl1emR2myVy-NV9GUac8E56uLt9cb_Zj-SyFIEO3LiU5_JagSCydkKme4q&long_chunk=1
 
-  //create folder
-  let dir = __dirname + "/songs";
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
-  }
-  startDownloading();
-});
+https://slider.kz/download/-2001595053_94595053/179/cs3-5v4/p2/0c4a923a13e792/Bahh%20Tee%2C%20Turken%20-%20%D0%9A%D1%82%D0%BE%20%D1%8F%20%D0%B1%D0%B5%D0%B7%20%D1%82%D0%B5%D0%B1%D1%8F%3F.mp3?extra=P-UsDbiPYWd6ElugnLEQ80oOsbcDYThLihfYLch4Ykqe9l_gzDZxktIvjc7B4k8QnjctXE1zocwaYT6dOvC4i_ygNO4vq2Kl1emR2myVy-NV9GUac8E56uLt9cb_Zj-SyFIEO3LiBJ2eMVmEytkJz-t_&long_chunk=1
