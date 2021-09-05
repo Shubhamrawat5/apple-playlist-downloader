@@ -42,6 +42,7 @@ const download = async (song, url) => {
     data.pipe(fs.createWriteStream(`${__dirname}/songs/${song}.mp3`));
   } catch {
     console.log("some error came!");
+    startDownloading(); //for next song!
   }
 };
 
