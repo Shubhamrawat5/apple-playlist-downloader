@@ -16,6 +16,5 @@
     "node-itunes-search": "^1.2.2",
     "progress": "^2.0.3",
     "request": "^2.88.2",
-    "terminal-image": "^2.0.0"
   }
 }
