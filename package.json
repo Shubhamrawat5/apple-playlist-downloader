@@ -12,6 +12,10 @@
     "axios": "^0.21.1",
     "html-entities": "^2.1.0",
     "jssoup": "0.0.12",
-    "progress": "^2.0.3"
+    "node-id3": "^0.2.3",
+    "node-itunes-search": "^1.2.2",
+    "progress": "^2.0.3",
+    "request": "^2.88.2",
+    "terminal-image": "^2.0.0"
   }
 }
