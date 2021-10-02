@@ -53,6 +53,7 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
       });
       //Use the result to extract tags
       itunesAPI.searchItunes(searchOptions).then((result) => {
+        try{
         // Get all the tags and cover art of the track using node-itunes-search and write them with node-id3
         let maxres = result.results[0]["artworkUrl100"].replace(
           "100x100",
@@ -96,8 +97,22 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
           } catch (err) {
             console.error(err);
           }
-          startDownloading(); //for next song!
+          startDownloading();
+           //for next song!
         });
+      }
+      catch{
+        console.log('Full tags not found for '+ song_name)
+                  const tags = {
+            title: song_name,
+            artist: singer_names
+          };
+          //console.log(tags);
+          const success = NodeID3.write(tags, filepath);
+          console.log("WRITTEN TAGS (Only artist name and track title)");
+          startDownloading();
+      }
+
       });
     });
 
