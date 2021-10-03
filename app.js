@@ -121,7 +121,7 @@ const getURL = async (song, singer) => {
   // console.log(INFO_URL + query);
   const { data } = await axios.get(encodeURI(INFO_URL + query));
 
-  if (data["audios"][""].length <= 1) {
+  if (data["audios"][""].length < 1) {
     //no result
     console.log("==[ SONG NOT FOUND! ]== : " + song);
     notFound.push(song + " - " + singer);
