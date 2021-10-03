@@ -146,11 +146,12 @@ const getURL = async (song, singer) => {
     startDownloading(); //next song
     return;
   }
-
+  
+  let track_title_for_url = track.tit_art.replace(/\?|<|>|\*|"|:|\||\/|\\/g, "");
   let link = DOWNLOAD_URL + track.id + "/";
   link = link + track.duration + "/";
   link = link + track.url + "/";
-  link = link + track.tit_art + ".mp3" + "?extra=";
+  link = link + track_title_for_url + ".mp3" + "?extra=";
   link = link + track.extra;
   link = encodeURI(link); //to replace unescaped characters from link
 
