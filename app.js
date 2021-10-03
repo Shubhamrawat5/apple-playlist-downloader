@@ -136,7 +136,7 @@ const getURL = async (song, singer) => {
   // console.log(INFO_URL + query);
   const { data } = await axios.get(encodeURI(INFO_URL + query));
 
-  if (data["audios"][""].length <= 1) {
+  if (data["audios"][""].length < 1) {
     //no result
     console.log("==[ SONG NOT FOUND! ]== : " + song);
     notFound.push(song + " - " + singer);
@@ -157,7 +157,8 @@ const getURL = async (song, singer) => {
   }
 
   if (fs.existsSync(__dirname + "/songs/" + track.tit_art + ".mp3")) {
-    console.log(index + 1 + "- Song already present!!!!! " + song);
+    let numb = index + 1;
+    console.log("("+numb+"/"+total+") - Song already present!!!!! " + song);
     startDownloading(); //next song
     return;
   }
