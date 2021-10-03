@@ -142,7 +142,8 @@ const getURL = async (song, singer) => {
   }
 
   if (fs.existsSync(__dirname + "/songs/" + track.tit_art + ".mp3")) {
-    console.log(index + 1 + "- Song already present!!!!! " + song);
+    let numb = index + 1;
+    console.log("("+numb+"/"+total+") - Song already present!!!!! " + song);
     startDownloading(); //next song
     return;
   }
