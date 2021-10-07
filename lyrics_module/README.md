@@ -5,6 +5,7 @@ How to use :
 
 ```
 npm install
+If you have problems with security type npm audit fix --force
 pip3 install -r requirements.txt
 ```
 Set the playlist link at the 'url' variable in the file 'apple_playlist.js'
