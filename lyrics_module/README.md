@@ -29,4 +29,6 @@ python3 searcher.py
 ```
 Then wait and you will get a result like this :
 <img width="1125" alt="Capture d’écran 2021-10-07 à 18 35 28" src="https://user-images.githubusercontent.com/44288655/136427185-aba0dbe3-86db-4d28-ba6f-1520b6364058.png">
+
+All the lyrics are stored in the folder 'lyrics'
 Or a message like 'No lyrics found'
