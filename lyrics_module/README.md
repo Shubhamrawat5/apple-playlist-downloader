@@ -7,7 +7,8 @@ How to use :
 npm install
 pip3 install -r requirements.txt
 ```
-Set the playlist link at the 'url' variable. 
+Set the playlist link at the 'url' variable in the file 'apple_playlist.js'
+
 Get the playlists tracks and copy them into your clipboard :
 
 ```
