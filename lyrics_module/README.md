@@ -33,3 +33,7 @@ Then wait and you will get a result like this :
 
 All the lyrics are stored in the folder 'lyrics'
 Or a message like 'No lyrics found'
+
+
+
+Code uses https://gist.github.com/greenstick/b23e475d2bfdc3a82e34eaa1f6781ee4 for the progress bar and a modified version of https://github.com/Shubhamrawat5/apple-playlist-downloader/blob/master/apple_playlist.js to fetch the tracks.
