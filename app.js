@@ -44,7 +44,6 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
       singer_names = singer_names.replace(" and ", ", ");
       singer_names = singer_names.replace(" et ", ", ");
       singer_names = singer_names.replace(" und ", ", ");
-      singer_names = singer_names.replace(" & ", ", ");
       //Search track informations using the Itunes library
       const searchOptions = new itunesAPI.ItunesSearchOptions({
         term: query_artwork, // All searches require a single string query.
