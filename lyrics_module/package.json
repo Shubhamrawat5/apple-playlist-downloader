@@ -1,0 +1,29 @@
+{
+  "name": "lyrics_finder",
+  "version": "1.0.0",
+  "description": "A python and nodejs based app, who fetchs all the existing lyrics from your Apple Music playlist.",
+  "main": "fetch_playlist.js",
+  "scripts": {
+    "test": "node fetch_playlist.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antoinebollengier/apple-playlist-downloader.git#master"
+  },
+  "keywords": [
+    "nodejs"
+  ],
+  "author": "Antoine Bollengier, Shubham Rawat",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/antoinebollengier/apple-playlist-downloader/issues"
+  },
+  "homepage": "https://github.com/antoinebollengier/apple-playlist-downloader/tree/master#readme",
+  "devDependencies": {
+    "axios": "^0.22.0",
+    "child_process": "^1.0.2",
+    "clipboardy": "^2.3.0",
+    "fs": "^0.0.1-security",
+    "request": "^2.88.2"
+  }
+}
