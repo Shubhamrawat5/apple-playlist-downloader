@@ -14,6 +14,8 @@ Get the playlists tracks and copy them into your clipboard :
 node fetch_playlist.js
 ```
 You'll get an output like this :
+
+
 <img width="752" alt="Capture d’écran 2021-10-07 à 15 37 06" src="https://user-images.githubusercontent.com/44288655/136427167-f6ca4fd4-beca-41dd-b17f-2db16cadd75a.png">
 
 
