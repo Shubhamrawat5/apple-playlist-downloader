@@ -21,11 +21,7 @@ You'll get an output like this :
 <img width="752" alt="Capture d’écran 2021-10-07 à 15 37 06" src="https://user-images.githubusercontent.com/44288655/136427167-f6ca4fd4-beca-41dd-b17f-2db16cadd75a.png">
 
 
-Then go to the file searcher.py line 68 : 
-```
-nano +68 searcher.py 
-```
-Change the line and paste into the '''(here)''' your clipboard.
+Then go to the file searcher.py line 68 and change the line and paste into the '''(here)''' your clipboard.
 ```
 python3 searcher.py
 ```
