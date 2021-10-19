@@ -27,11 +27,13 @@ module.exports.getPlaylist = async () => {
     for (let track of tracksInfo) {
       let songName = track.find("div", "songs-list-row__song-name").text;
       let singerNames = track.find("div", "songs-list-row__by-line").text;
+      let album = track.find("div", "songs-list__col--album").text;
       singerNames = singerNames.replace(/\s{2,10}/g, ""); //remove spaces
       songName = songName.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
       playlistObj.songs.push({
         name: htmlEntities.decode(songName),
         singer: htmlEntities.decode(singerNames),
+        album: htmlEntities.decode(album),
       });
     }
     playlistObj.total = playlistObj.songs.length; //total songs count
