@@ -87,6 +87,6 @@ const getURL = async (song, singer) => {
 
 getURL("Кто я без тебя?", "Bahh Tee, Turken");
 
-https://slider.kz/download/-2001595053_94595053/179/cs3-5v4/p2/0c4a923a13e792/Bahh%20Tee%20Turken%20-%20Кто%20я%20без%20тебя?.mp3?extra=P-UsDbiPYWd6ElugnLEQ80oOsbcDYThLihfYLch4Ykqe9l_gzDZxktIvjc7B4k8QnjctXE1zps4TajmZP_Kyi_ygNO4vq2Kl1emR2myVy-NV9GUac8E56uLt9cb_Zj-SyFIEO3LiU5_JagSCydkKme4q&long_chunk=1
+// https://slider.kz/download/-2001595053_94595053/179/cs3-5v4/p2/0c4a923a13e792/Bahh%20Tee%20Turken%20-%20Кто%20я%20без%20тебя?.mp3?extra=P-UsDbiPYWd6ElugnLEQ80oOsbcDYThLihfYLch4Ykqe9l_gzDZxktIvjc7B4k8QnjctXE1zps4TajmZP_Kyi_ygNO4vq2Kl1emR2myVy-NV9GUac8E56uLt9cb_Zj-SyFIEO3LiU5_JagSCydkKme4q&long_chunk=1
 
-https://slider.kz/download/-2001595053_94595053/179/cs3-5v4/p2/0c4a923a13e792/Bahh%20Tee%2C%20Turken%20-%20%D0%9A%D1%82%D0%BE%20%D1%8F%20%D0%B1%D0%B5%D0%B7%20%D1%82%D0%B5%D0%B1%D1%8F%3F.mp3?extra=P-UsDbiPYWd6ElugnLEQ80oOsbcDYThLihfYLch4Ykqe9l_gzDZxktIvjc7B4k8QnjctXE1zocwaYT6dOvC4i_ygNO4vq2Kl1emR2myVy-NV9GUac8E56uLt9cb_Zj-SyFIEO3LiBJ2eMVmEytkJz-t_&long_chunk=1
+// https://slider.kz/download/-2001595053_94595053/179/cs3-5v4/p2/0c4a923a13e792/Bahh%20Tee%2C%20Turken%20-%20%D0%9A%D1%82%D0%BE%20%D1%8F%20%D0%B1%D0%B5%D0%B7%20%D1%82%D0%B5%D0%B1%D1%8F%3F.mp3?extra=P-UsDbiPYWd6ElugnLEQ80oOsbcDYThLihfYLch4Ykqe9l_gzDZxktIvjc7B4k8QnjctXE1zocwaYT6dOvC4i_ygNO4vq2Kl1emR2myVy-NV9GUac8E56uLt9cb_Zj-SyFIEO3LiBJ2eMVmEytkJz-t_&long_chunk=1
