@@ -129,7 +129,7 @@ var download_artwork = function (uri, filename, callback) {
     request(uri).pipe(fs.createWriteStream(filename)).on("close", callback);
   });
 };
-const getURL = async (song, singer) => {
+const getURL = async (song, singer, album) => {
   let query = (song + "%20" + singer).replace(/\s/g, "%20");
   // console.log(INFO_URL + query);
   const { data } = await axios.get(encodeURI(INFO_URL + query));
@@ -171,8 +171,8 @@ const getURL = async (song, singer) => {
   link = link + songName + ".mp3" + "?extra=";
   link = link + track.extra;
   link = encodeURI(link); //to replace unescaped characters from link
-
-  download(songName, link, song, singer, track.tit_art);
+  artwork_query = track.tit_art + ' ' + album;
+  download(songName, link, song, singer, artwork_query);
 };
 
 const startDownloading = () => {
@@ -190,7 +190,8 @@ const startDownloading = () => {
   }
   let song = songsList[index].name;
   let singer = songsList[index].singer;
-  getURL(song, singer);
+  let album = songsList[index].album;
+  getURL(song, singer, album);
 };
 
 console.log("STARTING....");
