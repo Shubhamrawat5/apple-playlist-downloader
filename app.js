@@ -1,9 +1,10 @@
 const fs = require("fs");
-const request = require("request");
-const ProgressBar = require("progress");
+request = require("request");
+var ProgressBar = require("progress");
 const axios = require("axios");
 const NodeID3 = require("node-id3");
 const itunesAPI = require("node-itunes-search");
+const { exec } = require("child_process");
 
 const INFO_URL = "https://slider.kz/vk_auth.php?q=";
 const DOWNLOAD_URL = "https://slider.kz/download/";
@@ -11,7 +12,33 @@ let index = -1;
 let songsList = [];
 let total = 0;
 let notFound = [];
+function get_lyrics (singers, songname){
+    var split_artists = singers.split(", "); // Separate differents artists : for Riton, Kah-Lo it will search for Riton, Kah-Lo - Riton - Kah-Lo
+split_artists.splice(2, 0, singers);
+for (let i = 0; i < split_artists.length; i++) {
+    exec("python3 searcher.py '"+split_artists[i]+"' '"+songname+"' '"+singers+"'", (error, stdout, stderr) => {
+    if (error) {
+        console.log(`error: ${error.message}`);
+        return;
+    }
+    if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        return;
+    }
+    if (`${stdout}` == 'LYRICS NOT FOUND\n'){
+        console.log('LYRICS NOT FOUND')
+        let lyrics = ''
+    }
+    else{
+        console.log('LYRICS FOUNDS')
+        //console.log(singers + ' - ' + songname + '.lrc')
+        return;
 
+    }
+
+});
+}
+}
 const download = async (song, url, song_name, singer_names, query_artwork) => {
   try {
     let numb = index + 1;
@@ -48,6 +75,7 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
       //Search track informations using the Itunes library
       const searchOptions = new itunesAPI.ItunesSearchOptions({
         term: query_artwork, // All searches require a single string query.
+
         limit: 1, // An optional maximum number of returned results may be specified.
       });
       //Use the result to extract tags
@@ -75,7 +103,7 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
           //console.log(trackNumber);
           //console.log(album);
           //console.log(maxres);
-          let query_artwork_file = song + ".jpg";
+          let query_artwork_file = query_artwork + ".jpg";
           download_artwork(maxres, query_artwork_file, function () {
             //console.log('Artwork downloaded');
             const tags = {
@@ -90,6 +118,8 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
             //console.log(tags);
             const success = NodeID3.write(tags, filepath);
             console.log("WRITTEN TAGS");
+            console.log("SEARCHING FOR LYRICS...");
+            get_lyrics(singer_names, song_name);
             try {
               fs.unlinkSync(query_artwork_file);
               //file removed
@@ -108,6 +138,8 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
           //console.log(tags);
           const success = NodeID3.write(tags, filepath);
           console.log("WRITTEN TAGS (Only artist name and track title)");
+          console.log("SEARCHING FOR LYRICS...");
+          get_lyrics(singer_names, song_name);
           startDownloading();
         }
       });
@@ -120,7 +152,7 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
     startDownloading(); //for next song!
   }
 };
-const download_artwork = function (uri, filename, callback) {
+var download_artwork = function (uri, filename, callback) {
   request.head(uri, function (err, res, body) {
     //console.log('content-type:', res.headers['content-type']);
     //console.log('content-length:', res.headers['content-length']);
@@ -129,7 +161,7 @@ const download_artwork = function (uri, filename, callback) {
   });
 };
 const getURL = async (song, singer, album) => {
-  let query = (singer + "%20" + song).replace(/\s/g, "%20");
+  let query = (song + "%20" + singer).replace(/\s/g, "%20");
   // console.log(INFO_URL + query);
   const { data } = await axios.get(encodeURI(INFO_URL + query));
 
@@ -145,7 +177,7 @@ const getURL = async (song, singer, album) => {
   //avoid remix,revisited,mix
   let i = 0;
   let track = data["audios"][""][i];
-  while (/remix|revisited|reverb|mix/i.test(track.tit_art)) {
+  while (/remix|revisited|mix/i.test(track.tit_art)) {
     i += 1;
     track = data["audios"][""][i];
   }
@@ -154,9 +186,7 @@ const getURL = async (song, singer, album) => {
     track = data["audios"][""][0];
   }
 
-  let songName = track.tit_art.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
-
-  if (fs.existsSync(__dirname + "/songs/" + songName + ".mp3")) {
+  if (fs.existsSync(__dirname + "/songs/" + track.tit_art + ".mp3")) {
     let numb = index + 1;
     console.log(
       "(" + numb + "/" + total + ") - Song already present!!!!! " + song
@@ -164,15 +194,15 @@ const getURL = async (song, singer, album) => {
     startDownloading(); //next song
     return;
   }
-
+  
+  let songName = track.tit_art.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
   let link = DOWNLOAD_URL + track.id + "/";
   link = link + track.duration + "/";
   link = link + track.url + "/";
   link = link + songName + ".mp3" + "?extra=";
   link = link + track.extra;
   link = encodeURI(link); //to replace unescaped characters from link
-
-  let artwork_query = encodeURI(track.tit_art + " " + album);
+  artwork_query = track.tit_art + ' ' + album;
   download(songName, link, song, singer, artwork_query);
 };
 
