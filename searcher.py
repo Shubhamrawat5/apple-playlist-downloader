@@ -6,10 +6,8 @@ import argparse
 import requests
 import unidecode  # to remove accents
 from bs4 import BeautifulSoup
-from fuzzywuzzy import fuzz
 
 def megalobiz(artist, songname):
-    service_name = "Megalobiz"
 
     search_url = "https://www.megalobiz.com/search/all?%s" % parse.urlencode({
         "qry": f"{artist} {songname}",
@@ -29,8 +27,9 @@ def megalobiz(artist, songname):
     for result_link in result_links:
         lower_title = result_link.get_text().lower()
         entire_string = lower_title + ' - ' + artist.lower()
-        Ratio = fuzz.ratio(entire_string.lower(),lower_title.lower())
-        if Ratio > 85:
+        #Ratio = fuzz.ratio(entire_string.lower(),lower_title.lower())
+        #if Ratio > 85:
+        if artist.lower() in lower_title and songname.lower() in lower_title: 
             url = f"https://www.megalobiz.com{result_link['href']}"
             possible_text = requests.get(url)
             soup = BeautifulSoup(possible_text.text, 'html.parser')
