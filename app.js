@@ -1,6 +1,6 @@
 const fs = require("fs");
-request = require("request");
-var ProgressBar = require("progress");
+const request = require("request");
+const ProgressBar = require("progress");
 const axios = require("axios");
 const NodeID3 = require("node-id3");
 const itunesAPI = require("node-itunes-search");
