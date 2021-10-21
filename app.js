@@ -5,6 +5,7 @@ const axios = require("axios");
 const NodeID3 = require("node-id3");
 const itunesAPI = require("node-itunes-search");
 const { exec } = require("child_process");
+const minimist = require('minimist');
 
 const INFO_URL = "https://slider.kz/vk_auth.php?q=";
 const DOWNLOAD_URL = "https://slider.kz/download/";
@@ -14,6 +15,16 @@ let total = 0;
 let notFound = [];
 let songsFound = [];
 let lyricsFound = [];
+let args = minimist(process.argv.slice(2), {
+    default: {
+        h: false,
+        p: false
+    },
+});
+if(args.h == true){
+  console.log("HELP \n -h : Shows current message\n -p : Won't use python script to fetch lyrics. ");
+  process.exit()
+}
 function get_lyrics (){
 for (let songs of songsFound) {
   let artist1 = songs.artist;
@@ -233,9 +244,15 @@ const startDownloading = () => {
       i += 1;
     }
     if (i === 1) console.log("None!");
+    if (args.p == false){
     console.log("SEARCHING FOR LYRICS...");
     get_lyrics();
     return;
+  }
+  if (args.p == true){
+    console.log("LYRICS SEARCH DISABLE");
+    return;
+  }
   }
   let song = songsList[index].name;
   let singer = songsList[index].singer;
