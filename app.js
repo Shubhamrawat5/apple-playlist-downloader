@@ -12,11 +12,17 @@ let index = -1;
 let songsList = [];
 let total = 0;
 let notFound = [];
-function get_lyrics (singers, songname){
-    var split_artists = singers.split(", "); // Separate differents artists : for Riton, Kah-Lo it will search for Riton, Kah-Lo - Riton - Kah-Lo
-split_artists.splice(2, 0, singers);
+let songsFound = [];
+let lyricsFound = [];
+function get_lyrics (){
+for (let songs of songsFound) {
+  let artist1 = songs.artist;
+  let songname1 = songs.songname;
+  let album1 = songs.album;
+      var split_artists = artist1.split(", "); // Separate differents artists : for Riton, Kah-Lo it will search for Riton, Kah-Lo - Riton - Kah-Lo
+split_artists.splice(2, 0, artist1);
 for (let i = 0; i < split_artists.length; i++) {
-    exec("python3 searcher.py '"+split_artists[i]+"' '"+songname+"' '"+singers+"'", (error, stdout, stderr) => {
+    exec("python3 searcher.py '"+split_artists[i]+"' '"+songname1+"' '"+artist1+"'", (error, stdout, stderr) => {
     if (error) {
         console.log(`error: ${error.message}`);
         return;
@@ -26,19 +32,25 @@ for (let i = 0; i < split_artists.length; i++) {
         return;
     }
     if (`${stdout}` == 'LYRICS NOT FOUND\n'){
-        console.log('LYRICS NOT FOUND')
-        let lyrics = ''
+        //console.log('LYRICS NOT FOUND')
     }
     else{
-        console.log('LYRICS FOUNDS')
+        console.log('LYRICS FOUNDS FOR : ' + artist1 + ' - ' + songname1)
         //console.log(singers + ' - ' + songname + '.lrc')
+        lyricsFound.push({
+          songname: songname1,
+          artist: artist1,
+      });
         return;
 
     }
 
 });
 }
+
 }
+}
+get_lyrics();
 const download = async (song, url, song_name, singer_names, query_artwork) => {
   try {
     let numb = index + 1;
@@ -118,8 +130,10 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
             //console.log(tags);
             const success = NodeID3.write(tags, filepath);
             console.log("WRITTEN TAGS");
-            console.log("SEARCHING FOR LYRICS...");
-            get_lyrics(singer_names, song_name);
+                    songsFound.push({
+          songname: song_name,
+          artist: singer_names,
+      });
             try {
               fs.unlinkSync(query_artwork_file);
               //file removed
@@ -138,8 +152,10 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
           //console.log(tags);
           const success = NodeID3.write(tags, filepath);
           console.log("WRITTEN TAGS (Only artist name and track title)");
-          console.log("SEARCHING FOR LYRICS...");
-          get_lyrics(singer_names, song_name);
+          songsFound.push({
+          songname: song_name,
+          artist: singer_names,
+      });
           startDownloading();
         }
       });
@@ -217,6 +233,8 @@ const startDownloading = () => {
       i += 1;
     }
     if (i === 1) console.log("None!");
+    console.log("SEARCHING FOR LYRICS...");
+    get_lyrics();
     return;
   }
   let song = songsList[index].name;
