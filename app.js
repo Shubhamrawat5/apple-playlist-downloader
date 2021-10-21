@@ -21,7 +21,7 @@ let args = minimist(process.argv.slice(2), {
         p: false
     },
 });
-if(args.h == true){
+if (args.h == true){
   console.log("HELP \n -h : Shows current message\n -p : Won't use python script to fetch lyrics. ");
   process.exit()
 }
@@ -61,7 +61,6 @@ for (let i = 0; i < split_artists.length; i++) {
 
 }
 }
-get_lyrics();
 const download = async (song, url, song_name, singer_names, query_artwork) => {
   try {
     let numb = index + 1;
