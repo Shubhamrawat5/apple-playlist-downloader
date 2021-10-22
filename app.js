@@ -30,8 +30,10 @@ for (let songs of songsFound) {
   let artist1 = songs.artist;
   let songname1 = songs.songname;
   let album1 = songs.album;
-      var split_artists = artist1.split(", "); // Separate differents artists : for Riton, Kah-Lo it will search for Riton, Kah-Lo - Riton - Kah-Lo
-split_artists.splice(2, 0, artist1);
+  var split_artists = artist1.split(", "); // Separate differents artists : for Riton, Kah-Lo it will search for Riton, Kah-Lo - Riton - Kah-Lo
+  if (split_artists.length !== 1){
+    split_artists.splice(2, 0, artist1);
+  }
 for (let i = 0; i < split_artists.length; i++) {
     exec("python3 searcher.py '"+split_artists[i]+"' '"+songname1+"' '"+artist1+"'", (error, stdout, stderr) => {
     if (error) {
