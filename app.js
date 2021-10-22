@@ -27,6 +27,7 @@ if (args.h == true){
 }
 function get_lyrics (){
 for (let songs of songsFound) {
+  lyricsok = false;
   let artist1 = songs.artist;
   let songname1 = songs.songname;
   let album1 = songs.album;
@@ -38,23 +39,29 @@ for (let i = 0; i < split_artists.length; i++) {
     exec("python3 searcher.py '"+split_artists[i]+"' '"+songname1+"' '"+artist1+"'", (error, stdout, stderr) => {
     if (error) {
         console.log(`error: ${error.message}`);
+        lyricsok = false;
         return;
     }
     if (stderr) {
         console.log(`stderr: ${stderr}`);
+        lyricsok = false;
         return;
     }
     if (`${stdout}` == 'LYRICS NOT FOUND\n'){
         //console.log('LYRICS NOT FOUND')
+        lyricsok = false;
     }
     else{
+        if (lyricsok == false){
         console.log('LYRICS FOUNDS FOR : ' + artist1 + ' - ' + songname1)
         //console.log(singers + ' - ' + songname + '.lrc')
+        lyricsok = true;
         lyricsFound.push({
           songname: songname1,
           artist: artist1,
       });
         return;
+      }
 
     }
 
