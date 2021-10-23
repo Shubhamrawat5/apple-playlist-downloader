@@ -5,8 +5,9 @@
 3. Open directory by `cd apple-playlist-downloader`
 4. Run `npm install` and `pip3 install -r requirements.txt` to install all dependencies
 5. If you get a message that there is many security problems type `npm audit fix --force` 
-6. Now edit playlist url variable and set your playlist link in file `apple_playlist.js [line 8]`
-7. Run `node app.js` or if you don't want lyrics add a '-p' to the command
+6. Make sure the python command is right in app.js line 2, default command is 'python3'.
+7. Now edit playlist url variable and set your playlist link in file `apple_playlist.js [line 8]`
+8. Run `node app.js` or if you don't want lyrics add a '-p' to the command
 
 - Now a folder named "songs" will be created.
 
