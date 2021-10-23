@@ -1,4 +1,4 @@
-// Script by @antoinebollengier and  https://github.com/SimonIT/spotifylyrics
+# Script by @antoinebollengier and  https://github.com/SimonIT/spotifylyrics
 import os
 import re
 from urllib import request, parse
