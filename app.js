@@ -117,17 +117,11 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
             "3000x3000"
           );
           let year = result.results[0]["releaseDate"].substring(0, 4);
-          let genre = result.results[0]["primaryGenreName"].replace(
-            /\?|<|>|\*|"|:|\||\/|\\/g,
-            ""
-          );
+          let genre = result.results[0]["primaryGenreName"];//.replace(/\?|<|>|\*|"|:|\||\/|\\/g,"");
           let trackNumber = result.results[0]["trackNumber"];
           let trackCount = result.results[0]["trackCount"];
           trackNumber = trackNumber + "/" + trackCount;
-          let album = result.results[0]["collectionName"].replace(
-            /\?|<|>|\*|"|:|\||\/|\\/g,
-            ""
-          );
+          let album = result.results[0]["collectionName"];//.replace(/\?|<|>|\*|"|:|\||\/|\\/g,"")
           //console.log(genre);
           //console.log(year);
           //console.log(trackNumber);
@@ -220,7 +214,7 @@ const getURL = async (song, singer, album) => {
     track = data["audios"][""][0];
   }
     
-  if (fs.existsSync(__dirname + "/songs/" + track.tit_art + ".mp3")) {
+  if (fs.existsSync(__dirname + "/songs/" + songName + ".mp3")) {
     let numb = index + 1;
     console.log(
       "(" + numb + "/" + total + ") - Song already present!!!!! " + song
