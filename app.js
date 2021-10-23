@@ -213,7 +213,8 @@ const getURL = async (song, singer, album) => {
   if (!track) {
     track = data["audios"][""][0];
   }
-    
+  let songName = track.tit_art.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
+
   if (fs.existsSync(__dirname + "/songs/" + songName + ".mp3")) {
     let numb = index + 1;
     console.log(
@@ -223,7 +224,6 @@ const getURL = async (song, singer, album) => {
     return;
   }
   
-  let songName = track.tit_art.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
   let link = DOWNLOAD_URL + track.id + "/";
   link = link + track.duration + "/";
   link = link + track.url + "/";
