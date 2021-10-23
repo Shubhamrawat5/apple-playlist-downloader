@@ -1,3 +1,6 @@
+// INSERT HERE THE PYTHON COMMAND :
+python_command = 'python3';
+//MAKE SURE IT IS OK, 'python3' is default
 const fs = require("fs");
 const request = require("request");
 const ProgressBar = require("progress");
@@ -36,7 +39,7 @@ for (let songs of songsFound) {
     split_artists.splice(2, 0, artist1);
   }
 for (let i = 0; i < split_artists.length; i++) {
-    exec("python3 searcher.py '"+split_artists[i]+"' '"+songname1+"' '"+artist1+"'", (error, stdout, stderr) => {
+    exec(python_command + " searcher.py '"+split_artists[i]+"' '"+songname1+"' '"+artist1+"'", (error, stdout, stderr) => {
     if (error) {
         console.log(`error: ${error.message}`);
         lyricsok = false;
