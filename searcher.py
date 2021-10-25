@@ -1,5 +1,6 @@
 # Script by @antoinebollengier and  https://github.com/SimonIT/spotifylyrics
 import os
+import platform
 import re
 from urllib import request, parse
 import sys
@@ -42,9 +43,24 @@ def megalobiz(artist, songname):
             print(lrc)
             f.close()
             ok = 1
-            print(filename_lrc)
-            os.system('mkdir -p lyrics')
-            os.system("mv '" + filename_lrc + "' 'lyrics/" + b_artist + ' - ' + b_title + '.lrc'+"'")
+            os_platform = platform.system()
+            if os_platform == 'Linux':
+                os_final = 'Linux'
+                os.system('mkdir -p lyrics')
+                os.system("mv '" + filename_lrc + "' 'lyrics/" + b_artist + ' - ' + b_title + '.lrc'+"'")
+            elif os_platform == 'Windows':
+                os_final = 'Windows'
+                os.system('mkdir -p lyrics')
+                os.system("move '" + filename_lrc + "' 'lyrics/" + b_artist + ' - ' + b_title + '.lrc'+"'")
+            elif os_platform == 'Darwin':
+                os_final = 'MacOS'
+                os.system('mkdir -p lyrics')
+                os.system("mv '" + filename_lrc + "' 'lyrics/" + b_artist + ' - ' + b_title + '.lrc'+"'")
+            else:
+                os_final = 'Dunno'
+                os.system('mkdir -p lyrics')
+                os.system("mv '" + filename_lrc + "' 'lyrics/" + b_artist + ' - ' + b_title + '.lrc'+"'")                
+            print("lyrics/" + b_artist + ' - ' + b_title + '.lrc')
             exit()
     print('LYRICS NOT FOUND')
 
