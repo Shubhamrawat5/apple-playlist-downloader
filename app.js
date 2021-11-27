@@ -208,7 +208,8 @@ const getURL = async (song, singer, album) => {
   //avoid remix,revisited,mix
   let i = 0;
   let track = data["audios"][""][i];
-  while (/remix|revisited|reverb|mix/i.test(track.tit_art)) {
+  let totalTracks = data["audios"][""].length;
+  while (i < totalTracks && /remix|revisited|reverb|mix/i.test(track.tit_art)) {
     i += 1;
     track = data["audios"][""][i];
   }
