@@ -251,7 +251,7 @@ const getURL = async (song, singer, album) => {
   link = link + songName + ".mp3" + "?extra=";
   link = link + track.extra;
   link = encodeURI(link); //to replace unescaped characters from link
-  artwork_query = track.tit_art + ' ' + album;
+  artwork_query = encodeURI(track.tit_art + ' ' + album);
   download(songName, link, song, singer, artwork_query);
 };
 
