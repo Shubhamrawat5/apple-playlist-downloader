@@ -13,7 +13,7 @@
     "child_process": "^1.0.2",
     "html-entities": "^2.1.0",
     "jssoup": "^0.0.15",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "node-id3": "^0.2.3",
     "node-itunes-search": "^1.2.2",
     "progress": "^2.0.3",
