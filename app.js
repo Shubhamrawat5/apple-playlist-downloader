@@ -278,6 +278,7 @@ const startDownloading = () => {
     return;
   }
       */
+      return;
   }
   let song = songsList[index].name;
   let singer = songsList[index].singer;
