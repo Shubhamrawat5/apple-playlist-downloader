@@ -17,8 +17,8 @@ let songsList = [];
 let total = 0;
 let notFound = [];
 let songsFound = [];
-let lyricsFound = [];
-let args = minimist(process.argv.slice(2), {
+//let lyricsFound = [];
+/*let args = minimist(process.argv.slice(2), {
     default: {
         h: false,
         p: false
@@ -73,6 +73,7 @@ for (let i = 0; i < split_artists.length; i++) {
 
 }
 }
+*/
 const download = async (song, url, song_name, singer_names, query_artwork) => {
   try {
     let numb = index + 1;
@@ -266,15 +267,17 @@ const startDownloading = () => {
       i += 1;
     }
     if (i === 1) console.log("None!");
+     /*
     if (args.p == false){
     console.log("SEARCHING FOR LYRICS...");
     get_lyrics();
     return;
   }
   if (args.p == true){
-    console.log("LYRICS SEARCH DISABLE");
+    console.log("LYRICS SEARCH DISABLED");
     return;
   }
+      */
   }
   let song = songsList[index].name;
   let singer = songsList[index].singer;
