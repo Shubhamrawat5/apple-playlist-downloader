@@ -2,11 +2,9 @@ const axios = require("axios");
 const JSSoup = require("jssoup").default;
 const htmlEntities = require("html-entities");
 
-module.exports.getPlaylist = async () => {
+module.exports.getPlaylist = async (url) => {
   try {
     let playlistObj = {};
-    let url =
-      ""; //insert here your playlist url
     const response = await axios.get(url);
     let htmlContent = response.data;
     let soup = new JSSoup(htmlContent);
@@ -17,7 +15,6 @@ module.exports.getPlaylist = async () => {
     let playlistUser = playlistHeaderBlock
       .find("div", "product-creator")
       .text.trim();
-    // console.log(playlistName, playlistUser);
     playlistObj.playlist = htmlEntities.decode(playlistName);
     playlistObj.user = htmlEntities.decode(playlistUser);
 
@@ -37,7 +34,6 @@ module.exports.getPlaylist = async () => {
       });
     }
     playlistObj.total = playlistObj.songs.length; //total songs count
-    // console.log(playlistObj);
     return playlistObj;
   } catch {
     return "Some Error";

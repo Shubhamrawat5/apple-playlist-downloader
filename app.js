@@ -1,13 +1,11 @@
-// INSERT HERE THE PYTHON COMMAND :
-python_command = 'python3';
-//MAKE SURE IT IS OK, 'python3' is default
+#! /usr/bin/env node
+const { cwd } = require('node:process');
 const fs = require("fs");
 const request = require("request");
 const ProgressBar = require("progress");
 const axios = require("axios");
 const NodeID3 = require("node-id3");
 const itunesAPI = require("node-itunes-search");
-const { exec } = require("child_process");
 const minimist = require('minimist');
 
 const INFO_URL = "https://slider.kz/vk_auth.php?q=";
@@ -17,63 +15,7 @@ let songsList = [];
 let total = 0;
 let notFound = [];
 let songsFound = [];
-//let lyricsFound = [];
-/*let args = minimist(process.argv.slice(2), {
-    default: {
-        h: false,
-        p: false
-    },
-});
-if (args.h == true){
-  console.log("HELP \n -h : Shows current message\n -p : Won't use python script to fetch lyrics. ");
-  process.exit()
-}
-function get_lyrics (){
-for (let songs of songsFound) {
-  lyricsok = false;
-  let artist1 = songs.artist;
-  let songname1 = songs.songname;
-  let album1 = songs.album;
-  var split_artists = artist1.split(", "); // Separate differents artists : for Riton, Kah-Lo it will search for Riton, Kah-Lo - Riton - Kah-Lo
-  if (split_artists.length !== 1){
-    split_artists.splice(2, 0, artist1);
-  }
-for (let i = 0; i < split_artists.length; i++) {
-    exec(python_command + " searcher.py '"+split_artists[i]+"' '"+songname1+"' '"+artist1+"'", (error, stdout, stderr) => {
-    if (error) {
-        console.log(`error: ${error.message}`);
-        lyricsok = false;
-        return;
-    }
-    if (stderr) {
-        console.log(`stderr: ${stderr}`);
-        lyricsok = false;
-        return;
-    }
-    if (`${stdout}` == 'LYRICS NOT FOUND\n'){
-        //console.log('LYRICS NOT FOUND')
-        lyricsok = false;
-    }
-    else{
-        if (lyricsok == false){
-        console.log('LYRICS FOUNDS FOR : ' + artist1 + ' - ' + songname1)
-        //console.log(singers + ' - ' + songname + '.lrc')
-        lyricsok = true;
-        lyricsFound.push({
-          songname: songname1,
-          artist: artist1,
-      });
-        return;
-      }
 
-    }
-
-});
-}
-
-}
-}
-*/
 const download = async (song, url, song_name, singer_names, query_artwork) => {
   try {
     let numb = index + 1;
@@ -101,7 +43,7 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
     data.on("end", () => {
       singer_names = singer_names.replace(/\s{2,10}/g, "");
       console.log("DOWNLOADED!");
-      const filepath = `${__dirname}/songs/${song}.mp3`;
+      const filepath = `${dir}/${song}.mp3`;
       //Replace all connectives by a simple ','
       singer_names = singer_names.replace(" and ", ", ");
       singer_names = singer_names.replace(" et ", ", ");
@@ -127,14 +69,8 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
           let trackCount = result.results[0]["trackCount"];
           trackNumber = trackNumber + "/" + trackCount;
           let album = result.results[0]["collectionName"];//.replace(/\?|<|>|\*|"|:|\||\/|\\/g,"")
-          //console.log(genre);
-          //console.log(year);
-          //console.log(trackNumber);
-          //console.log(album);
-          //console.log(maxres);
           let query_artwork_file = song + ".jpg";
           download_artwork(maxres, query_artwork_file, function () {
-            //console.log('Artwork downloaded');
             const tags = {
               TALB: album,
               title: song_name,
@@ -144,7 +80,6 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
               trackNumber: trackNumber,
               genre: genre,
             };
-            //console.log(tags);
             const success = NodeID3.write(tags, filepath);
             console.log("WRITTEN TAGS");
                     songsFound.push({
@@ -195,7 +130,7 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
     });
 
     //for saving in file...
-    data.pipe(fs.createWriteStream(`${__dirname}/songs/${song}.mp3`));
+    data.pipe(fs.createWriteStream(`${dir}/${song}.mp3`));
   } catch {
     console.log("some error came!");
     startDownloading(); //for next song!
@@ -203,15 +138,11 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
 };
 const download_artwork = function (uri, filename, callback) {
   request.head(uri, function (err, res, body) {
-    //console.log('content-type:', res.headers['content-type']);
-    //console.log('content-length:', res.headers['content-length']);
-
     request(uri).pipe(fs.createWriteStream(filename)).on("close", callback);
   });
 };
 const getURL = async (song, singer, album) => {
   let query = (singer + "%20" + song).replace(/\s/g, "%20");
-  // console.log(INFO_URL + query);
   const { data } = await axios.get(encodeURI(INFO_URL + query));
 
   // when no result then [{}] is returned so length is always 1, when 1 result then [{id:"",etc:""}]
@@ -237,7 +168,7 @@ const getURL = async (song, singer, album) => {
   }
   let songName = track.tit_art.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
 
-  if (fs.existsSync(__dirname + "/songs/" + songName + ".mp3")) {
+  if (fs.existsSync(dir + "/" + songName + ".mp3")) {
     let numb = index + 1;
     console.log(
       "(" + numb + "/" + total + ") - Song already present!!!!! " + song
@@ -267,18 +198,7 @@ const startDownloading = () => {
       i += 1;
     }
     if (i === 1) console.log("None!");
-     /*
-    if (args.p == false){
-    console.log("SEARCHING FOR LYRICS...");
-    get_lyrics();
-    return;
-  }
-  if (args.p == true){
-    console.log("LYRICS SEARCH DISABLED");
-    return;
-  }
-      */
-      return;
+      process.exit(0)
   }
   let song = songsList[index].name;
   let singer = songsList[index].singer;
@@ -287,23 +207,81 @@ const startDownloading = () => {
 };
 
 console.log("STARTING....");
+//Initializing variables
 let playlist = require("./apple_playlist");
-playlist.getPlaylist().then((res) => {
+let dir = "";
+let playlistUrl = ""; 
+let urlWithoutParameter = false;
+const workingDir = process.cwd();
+let args = minimist(process.argv.slice(2), {
+    default: {
+        h: false,
+        help: false,
+        u: '',
+        url: '',
+        p: workingDir,
+        path: workingDir,
+        d: false,
+        dcd: false
+    },
+});
+let args2 = process.argv.slice(2);
+let possibleUrl = args2.filter(s=>~s.indexOf("music.apple.com"));
+if (Object.keys(possibleUrl).length == 1) {
+  playlistUrl = possibleUrl[0];
+  urlWithoutParameter = true;
+}
+if (args.h == true || args.help){
+  console.log(`HELP \n\n(Required)   / -u / --url "URL" : Download playlist with provided URL\n\n(Optional) -p / --path /path/to/song/folder : Download songs to provided path, default : current directory.\n\n(Optional) -d / --dcd : Won't use/create ApdSongs folder in the path.\n\n(Optional) -h / --help : Shows current message\n\nExample :\napd "url"`);
+  process.exit(0)
+}
+else if (args.u == '' && args.url == '' && !urlWithoutParameter){
+  console.log('Please provide an url. Type apd -h for help.');
+  process.exit(1)
+}
+else if (!urlWithoutParameter) {
+  if (args.u == ''){
+    playlistUrl = args.url;
+  }
+  else {
+    playlistUrl = args.u;
+  }
+}
+// check if directory exists
+if (!fs.existsSync(args.p) || !fs.existsSync(args.path)) {
+    console.log('Provided path does not exists. Type apd -h for help.');
+    process.exit(1)
+}
+let basePath = "";
+if (args.p == workingDir && args.path == workingDir) {
+  basePath = workingDir;
+}
+else if (args.p != workingDir) {
+  basePath = args.p;
+}
+else {
+  basePath = args.path;
+}
+playlist.getPlaylist(playlistUrl).then((res) => {
   if (res === "Some Error") {
     //wrong url
     console.log(
       "Error: maybe the url you inserted is not of apple music playlist or check your connection!"
     );
-    return;
+    process.exit(1)
   }
   songsList = res.songs;
   total = res.total;
   console.log("Total songs:" + total);
-
-  //create folder
-  let dir = __dirname + "/songs";
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
+  if (args.dcd || args.d) {
+    dir = basePath;
+  }
+  else {
+    //create folder
+    dir = basePath + "/ApdSongs";
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
   }
   startDownloading();
 });
