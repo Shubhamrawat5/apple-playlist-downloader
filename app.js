@@ -1,4 +1,3 @@
-#! /usr/bin/env node
 const { cwd } = require('node:process');
 const fs = require("fs");
 const request = require("request");
