@@ -1,6 +1,6 @@
 {
   "name": "apple-music",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "To download apple music playlist songs",
   "main": "app.js",
   "scripts": {
