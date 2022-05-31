@@ -3,13 +3,31 @@
 1. Open cmd/console
 2. Clone repo by `git clone git@github.com:Shubhamrawat5/apple-playlist-downloader.git`
 3. Open directory by `cd apple-playlist-downloader`
-4. Run `npm install` (and `pip3 install -r requirements.txt` to install all dependencies)
+4. Run `npm install` ~~(and `pip3 install -r requirements.txt` to install all dependencies)~~
 5. If you get a message that there is many security problems type `npm audit fix --force` 
-(6. Make sure the python command is right in app.js line 2, default command is 'python3'.)
-7. Now edit playlist url variable and set your playlist link in file `apple_playlist.js [line 8]`
-8. Run `node app.js` or if you don't want lyrics add a '-p' to the command
+~~(6. Make sure the python command is right in app.js line 2, default command is 'python3'.)~~
+###Run
+```
+HELP 
 
-- Now a folder named "songs" will be created.
+(Required)   / -u / --url "URL" : Download playlist with provided URL
+
+(Optional) -p / --path /path/to/song/folder : Download songs to provided path, default : current directory.
+
+(Optional) -d / --dcd : Won't use/create ApdSongs folder in the path.
+
+(Optional) -h / --help : Shows current message
+
+Example :
+apd "url"
+```
+###Example 
+
+`apd "https://music.apple.com/en/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740?l=en" `
+
+##Actions
+
+- Now a folder named "ApdSongs" will be created.
 
 - Playlist info will be extract and all the matching songs will start downloading!
 
@@ -17,7 +35,7 @@
 
 - Also there is 5% chance that song's some remix or different same name song will get downloaded...
 
-(- It tries to download time-synced lyrics (.lrc file) and song metadata (Cover image, artist, album, date, genre, etc...))
+~~(- It tries to download time-synced lyrics (.lrc file) and song metadata (Cover image, artist, album, date, genre, etc...))~~
 
 ### Screenshots 🚀
 
