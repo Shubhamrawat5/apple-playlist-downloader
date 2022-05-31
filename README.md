@@ -6,7 +6,7 @@
 4. Run `npm install` ~~(and `pip3 install -r requirements.txt` to install all dependencies)~~
 5. If you get a message that there is many security problems type `npm audit fix --force` 
 ~~(6. Make sure the python command is right in app.js line 2, default command is 'python3'.)~~
-###Run
+### Run
 ```
 HELP 
 
@@ -21,11 +21,11 @@ HELP
 Example :
 apd "url"
 ```
-###Example 
+### Example 
 
 `apd "https://music.apple.com/en/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740?l=en" `
 
-##Actions
+## Actions
 
 - Now a folder named "ApdSongs" will be created.
 
