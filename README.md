@@ -23,7 +23,7 @@ apd "url"
 ```
 ### Example 
 
-`apd "https://music.apple.com/en/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740?l=en" `
+`apd "https://music.apple.com/de/playlist/dancexl/pl.6bf4415b83ce4f3789614ac4c3675740?l=en" `
 
 ## Actions
 
