@@ -9,13 +9,13 @@
   "author": "Shubham Rawat, Antoine Bollengier",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.3",
+    "axios": "^0.27.2",
     "child_process": "^1.0.2",
-    "html-entities": "^2.1.0",
+    "html-entities": "^2.3.3",
     "jssoup": "^0.0.15",
     "minimist": "^1.2.6",
     "node-id3": "^0.2.3",
-    "node-itunes-search": "^1.2.2",
+    "node-itunes-search": "^1.2.3",
     "progress": "^2.0.3",
     "request": "^2.88.2"
   }
