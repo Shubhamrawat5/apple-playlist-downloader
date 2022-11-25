@@ -6,17 +6,26 @@ module.exports.getPlaylist = async () => {
   try {
     let playlistObj = {};
     let url =
-      "https://music.apple.com/in/playlist/chill/pl.u-11zBJ7ohN0qGl0e?ls"; //put your playlist url
+      "https://music.apple.com/fi/playlist/one-direction-essentials/pl.134ef3b46d32414e9b4b5a995a2f3ea7"; //put your playlist url
+
     const response = await axios.get(url);
     let htmlContent = response.data;
     let soup = new JSSoup(htmlContent);
 
     //scraping...
-    const playlistHeaderBlock = soup.find("div", "album-header-metadata");
-    let playlistName = playlistHeaderBlock.find("h1").text.trim();
-    let playlistUser = playlistHeaderBlock
-      .find("div", "product-creator")
-      .text.trim();
+    const playlistHeaderBlock = soup.find("div", "container-detail-header");
+    let playlistName, playlistUser;
+
+    try {
+      playlistName = playlistHeaderBlock.find("h1").text.trim();
+      playlistUser = playlistHeaderBlock
+        .find("p", "headings__subtitles")
+        .text.trim();
+    } catch (err) {
+      playlistName = "";
+      playlistUser = "";
+    }
+
     // console.log(playlistName, playlistUser);
     playlistObj.playlist = htmlEntities.decode(playlistName);
     playlistObj.user = htmlEntities.decode(playlistUser);
@@ -25,9 +34,10 @@ module.exports.getPlaylist = async () => {
     playlistObj.songs = [];
 
     for (let track of tracksInfo) {
-      let songName = track.find("div", "songs-list-row__song-name").text;
-      let singerNames = track.find("div", "songs-list-row__by-line").text;
-      let album = track.find("div", "songs-list__col--album").text;
+      let songName = track.find("div", "songs-list__col--song").text;
+      console.log(songName);
+      let singerNames = track.find("div", "songs-list__col--secondary").text;
+      let album = track.find("div", "songs-list__col--tertiary").text;
       singerNames = singerNames.replace(/\s{2,10}/g, ""); //remove spaces
       songName = songName.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
       playlistObj.songs.push({
@@ -39,7 +49,8 @@ module.exports.getPlaylist = async () => {
     playlistObj.total = playlistObj.songs.length; //total songs count
     // console.log(playlistObj);
     return playlistObj;
-  } catch {
+  } catch (err) {
+    // console.log(err);
     return "Some Error";
   }
 };

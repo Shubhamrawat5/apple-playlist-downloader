@@ -133,7 +133,8 @@ const getURL = async (song, singer, album) => {
   const { data } = await axios.get(encodeURI(INFO_URL + query));
 
   // when no result then [{}] is returned so length is always 1, when 1 result then [{id:"",etc:""}]
-  if (!data["audios"][""][0].id) {
+  // console.log(encodeURI(INFO_URL + query));
+  if (!data["audios"][""] || !data["audios"][""][0].id) {
     //no result
     console.log("==[ SONG NOT FOUND! ]== : " + song);
     notFound.push(song + " - " + singer);
