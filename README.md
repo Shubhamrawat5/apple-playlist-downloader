@@ -1,7 +1,7 @@
 ## apple-playlist-downloader 🎵
 
 1. Open cmd/console
-2. Clone repo by `git clone git@github.com:Shubhamrawat5/apple-playlist-downloader.git`
+2. Clone repo by `git clone https://github.com/Shubhamrawat5/apple-playlist-downloader.git`
 3. Open directory by `cd apple-playlist-downloader`
 4. Run `npm install` to install all dependencies
 5. Now edit playlist url variable and set your playlist link in file `apple_playlist.js [line 8]`
