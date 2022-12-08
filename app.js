@@ -114,8 +114,8 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
 
     //for saving in file...
     data.pipe(fs.createWriteStream(`${__dirname}/songs/${song}.mp3`));
-  } catch {
-    console.log("some error came!");
+  } catch (err) {
+    console.log("Error:", err);
     startDownloading(); //for next song!
   }
 };
@@ -166,11 +166,12 @@ const getURL = async (song, singer, album) => {
     return;
   }
 
-  let link = DOWNLOAD_URL + track.id + "/";
-  link = link + track.duration + "/";
-  link = link + track.url + "/";
-  link = link + songName + ".mp3" + "?extra=";
-  link = link + track.extra;
+  // let link = DOWNLOAD_URL + track.id + "/";
+  // link = link + track.duration + "/";
+  // link = link + track.url + "/";
+  // link = link + songName + ".mp3" + "?extra=";
+  // link = link + track.extra;
+  let link = track.url;
   link = encodeURI(link); //to replace unescaped characters from link
 
   let artwork_query = encodeURI(track.tit_art + " " + album);
