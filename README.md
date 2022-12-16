@@ -1,15 +1,21 @@
 ## apple-playlist-downloader 🎵
 
-This is a fork of the https://github.com/Shubhamrawat5/apple-playlist-downloader.git
+This is a fork of https://github.com/Shubhamrawat5/apple-playlist-downloader.git
+
+This version adds ability to more easily download from the terminal as it uses a command prompt
 
 
-
+## Initial setup
 1. Open cmd/console
 2. Clone repo by `git clone https://github.com/Shubhamrawat5/apple-playlist-downloader.git`
 3. Open directory by `cd apple-playlist-downloader`
 4. Run `npm install` to install all dependencies
 5. Run `node start.js`
 6. Enter the URL to an Apple Music playlist or album to start downloading.
+
+---
+Note: after initial setup, just run `node start.js` for all future downloads
+---
 
 - Now a folder named "songs" will be created.
 
