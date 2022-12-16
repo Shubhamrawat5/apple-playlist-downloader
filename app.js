@@ -1,3 +1,6 @@
+
+module.exports = function app () { 
+
 const fs = require("fs");
 const request = require("request");
 const ProgressBar = require("progress");
@@ -13,7 +16,6 @@ let index = -1;
 let songsList = [];
 let total = 0;
 let notFound = [];
-
 
 
 const download = async (song, url, song_name, singer_names, query_artwork) => {
@@ -203,8 +205,6 @@ const startDownloading = () => {
 
 console.log("STARTING....");
 
-playlistType = urlDetect("type");
-//console.log("urlDetect", playlistType.whatTypeOfURL)
 let playlist;
 playlist = require("./appleMusicPageLogic");
 playlist.getPlaylist().then((res) => {
@@ -226,3 +226,5 @@ playlist.getPlaylist().then((res) => {
   }
   startDownloading();
 });
+
+}

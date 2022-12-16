@@ -1,16 +1,15 @@
 const axios = require("axios");
 const JSSoup = require("jssoup").default;
 const htmlEntities = require("html-entities");
-const urlDetect = require("./urlDetect");
 const findSongs = require("./findSongs");
 
 
 module.exports.getPlaylist = async () => {
   try {
     let playlistObj = {};
-    let url =  urlDetect("url");
+    //let url =  global.url;
 
-    const response = await axios.get(url);
+    const response = await axios.get(global.url);
     let htmlContent = response.data;
     let soup = new JSSoup(htmlContent);
 

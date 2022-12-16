@@ -3,11 +3,9 @@ const htmlEntities = require("html-entities");
 
 
 module.exports = function findSongs (soup, playlistUser, playlistName) {
-
-    const whatType = urlDetect("type")
     let songs = [];
-
-    if (whatType === "playlist") {
+    //console.log(soup);
+    if ( urlDetect() === "playlist") {
          // playlist
          const tracksInfo = soup.findAll("div", "songs-list-row"); //finding all songs info
          //console.log("tracksInfo", tracksInfo)
@@ -24,9 +22,10 @@ module.exports = function findSongs (soup, playlistUser, playlistName) {
                 album: htmlEntities.decode(album),
             });
         }
-    } else if (whatType = "album") {
+    } else if ( urlDetect() === "album") {
         //Album
         const tracksInfo = soup.findAll("div", "songs-list-row--album"); //finding all songs info
+        //console.log(tracksInfo);
         for (let track of tracksInfo) {
             let songName = track.find("div", "songs-list-row__song-name").text;
             console.log(songName);
