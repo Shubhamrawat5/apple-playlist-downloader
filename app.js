@@ -7,7 +7,6 @@ const ProgressBar = require("progress");
 const axios = require("axios");
 const NodeID3 = require("node-id3");
 const itunesAPI = require("node-itunes-search");
-const urlDetect = require("./urlDetect"); 
 
 
 const INFO_URL = "https://slider.kz/vk_auth.php?q=";
@@ -64,22 +63,17 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
             "3000x3000"
           );
           let year = result.results[0]["releaseDate"].substring(0, 4);
-          let genre = result.results[0]["primaryGenreName"].replace(
+          let genre = result.results[0]["primaryGenreName"];//.replace(/\?|<|>|\*|"|:|\||\/|\\/g,"");
             /\?|<|>|\*|"|:|\||\/|\\/g,
             ""
           );
           let trackNumber = result.results[0]["trackNumber"];
           let trackCount = result.results[0]["trackCount"];
           trackNumber = trackNumber + "/" + trackCount;
-          let album = result.results[0]["collectionName"].replace(
+          let album = result.results[0]["collectionName"];//.replace(/\?|<|>|\*|"|:|\||\/|\\/g,"")
             /\?|<|>|\*|"|:|\||\/|\\/g,
             ""
           );
-          //console.log(genre);
-          //console.log(year);
-          //console.log(trackNumber);
-          //console.log(album);
-          //console.log(maxres);
           let query_artwork_file = song + ".jpg";
           download_artwork(maxres, query_artwork_file, function () {
             //console.log('Artwork downloaded');

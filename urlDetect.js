@@ -1,11 +1,9 @@
+// checks the URL to see if it is a playlist or album, and returns it.
 module.exports = function urlDetect (returnVal) {
-// change the line to your URL
-    let appleMusicURL = global.url  //url Here
-
     let whatTypeOfURL = "error"
-    if (appleMusicURL.indexOf("playlist") !== -1) {
+    if (global.url.indexOf("playlist") !== -1) {
         whatTypeOfURL = "playlist"
-    } else  if (appleMusicURL.indexOf("album") !== -1)  {
+    } else  if (global.url.indexOf("album") !== -1)  {
         whatTypeOfURL = "album"
     }
     console.log(`${whatTypeOfURL} detected.`)
