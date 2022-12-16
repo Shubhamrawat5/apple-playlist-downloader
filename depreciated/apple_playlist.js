@@ -1,12 +1,12 @@
 const axios = require("axios");
 const JSSoup = require("jssoup").default;
 const htmlEntities = require("html-entities");
+const urlDetect = require("./urlDetect");
 
 module.exports.getPlaylist = async () => {
   try {
     let playlistObj = {};
-    let url =
-      "https://music.apple.com/fi/playlist/one-direction-essentials/pl.134ef3b46d32414e9b4b5a995a2f3ea7"; //put your playlist url
+    let url =  urlDetect("url");
 
     const response = await axios.get(url);
     let htmlContent = response.data;

@@ -4,6 +4,8 @@ const ProgressBar = require("progress");
 const axios = require("axios");
 const NodeID3 = require("node-id3");
 const itunesAPI = require("node-itunes-search");
+const urlDetect = require("./urlDetect"); 
+
 
 const INFO_URL = "https://slider.kz/vk_auth.php?q=";
 const DOWNLOAD_URL = "https://slider.kz/download/";
@@ -11,6 +13,8 @@ let index = -1;
 let songsList = [];
 let total = 0;
 let notFound = [];
+
+
 
 const download = async (song, url, song_name, singer_names, query_artwork) => {
   try {
@@ -198,7 +202,11 @@ const startDownloading = () => {
 };
 
 console.log("STARTING....");
-let playlist = require("./apple_playlist");
+
+playlistType = urlDetect("type");
+//console.log("urlDetect", playlistType.whatTypeOfURL)
+let playlist;
+playlist = require("./appleMusicPageLogic");
 playlist.getPlaylist().then((res) => {
   if (res === "Some Error") {
     //wrong url
