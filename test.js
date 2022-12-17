@@ -19,6 +19,7 @@ let notFound = [];
 let songsFound = [];
 
 const download = async (song, url, song_name, singer_names, query_artwork) => {
+  console.log("url", url)
   try {
     let numb = index + 1;
     console.log(`(${numb}/${total}) Starting download: ${song}`);

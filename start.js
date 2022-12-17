@@ -19,6 +19,9 @@ prompt.get(properties, function (err, result) {
 
   console.log('Command-line input received:');
   console.log('  url: ' + result.url);
+  if (result.url.indexOf("library/albums") !== -1)  {
+    throw new Error("This is an album part of a user libray. THis script cannot access non public URLs. Try getting the public URL of the album.");
+  }
   app(result.url);
 
 });
