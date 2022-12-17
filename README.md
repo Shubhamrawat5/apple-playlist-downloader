@@ -7,7 +7,7 @@ This version adds ability to more easily download from the terminal as it uses a
 
 ## Initial setup
 1. Open cmd/console
-2. Clone repo by `git clone https://github.com/Shubhamrawat5/apple-playlist-downloader.git`
+2. Clone repo by `git clone https://github.com/fuzzywalrus/apple-playlist-downloader.git`
 3. Open directory by `cd apple-playlist-downloader`
 4. Run `npm install` to install all dependencies
 5. Run `node start.js`
