@@ -2,8 +2,6 @@ const axios = require("axios");
 const fs = require("fs");
 const download = require("./download");
 
-
-
 module.exports = getURL = async (song, artist, album, total) => {
     const INFO_URL = "https://slider.kz/vk_auth.php?q=";  // This is the request URL, its not easy to get perfect results
     const DOWNLOAD_URL = "https://slider.kz/download/";
@@ -53,6 +51,7 @@ module.exports = getURL = async (song, artist, album, total) => {
     // link = link + track.url + "/";
     // link = link + songName + ".mp3" + "?extra=";
     // link = link + track.extra;
+    
     let link = track.url;
     link = encodeURI(link); //to replace unescaped characters from link
   

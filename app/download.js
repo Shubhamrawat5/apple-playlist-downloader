@@ -5,8 +5,6 @@ const axios = require("axios");
 const fs = require("fs");
 
 
-
-
 module.exports = download = async (song, url, song_name, artist_names, query_artwork) => {
     //console.log ("download info:");
     //console.log("SONG:", song, "ARTIST:", artist_names, "URL:", url);
