@@ -2,6 +2,8 @@ const urlDetect = require("./urlDetect");
 const htmlEntities = require("html-entities");
 
 
+//Apple's pages vary a bit, depending on if it's a playlist or an album page. This simply uses urlDetect() scrape the data properly. 
+
 module.exports = function findSongs (soup, playlistUser, playlistName) {
     let songs = [];
     //console.log(soup);

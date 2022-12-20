@@ -5,14 +5,12 @@ const download = require("./download");
 
 
 module.exports = getURL = async (song, artist, album, total) => {
-    const INFO_URL = "https://slider.kz/vk_auth.php?q=";
+    const INFO_URL = "https://slider.kz/vk_auth.php?q=";  // This is the request URL, its not easy to get perfect results
     const DOWNLOAD_URL = "https://slider.kz/download/";
-
 
     // This is the querry that goes to slider.kz
     let query = (artist + "%20" + "%20" + song).replace(/\s/g, "%20");
     console.log("Original Query", query)
-    // console.log(INFO_URL + query);
     const { data } = await axios.get(encodeURI(INFO_URL + query));
   
     // when no result then [{}] is returned so length is always 1, when 1 result then [{id:"",etc:""}]
@@ -36,10 +34,11 @@ module.exports = getURL = async (song, artist, album, total) => {
     if (!track) {
       track = data["audios"][""][0];
     }
-  
+    
     let songName = track.tit_art.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
     songName = songName.replace("&amp;", "&");
   
+    // check to see if the song has been downloaded
     if (fs.existsSync(__dirname + "/songs/" + songName + ".mp3")) {
       let numb = global.index + 1;
       console.log(

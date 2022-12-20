@@ -17,7 +17,8 @@ module.exports = startDownloading = () => {
     let song = global.songsList[index].name;
     let artist = global.songsList[index].artist;
     let album = global.songsList[index].album;
-    console.log("ARTIST:", artist, "ALBUM:", album, "SONG:", song)
+    // this will show you how the query started
+    // console.log("ARTIST:", artist, "ALBUM:", album, "SONG:", song)
     getURL(song, artist, album);
   };
   
