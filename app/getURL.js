@@ -8,7 +8,6 @@ module.exports = getURL = async (song, artist, album, total) => {
 
     // This is the querry that goes to slider.kz
     let query = (artist + "%20" + "%20" + song).replace(/\s/g, "%20");
-    console.log("Original Query", query)
     const { data } = await axios.get(encodeURI(INFO_URL + query));
   
     // when no result then [{}] is returned so length is always 1, when 1 result then [{id:"",etc:""}]
