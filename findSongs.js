@@ -12,13 +12,13 @@ module.exports = function findSongs (soup, playlistUser, playlistName) {
         for (let track of tracksInfo) {
             let songName = track.find("div", "songs-list__col--song").text;
             console.log(songName);
-            let singerNames = track.find("div", "songs-list__col--secondary").text;
+            let artistNames = track.find("div", "songs-list__col--secondary").text;
             let album = track.find("div", "songs-list__col--tertiary").text;
-            singerNames = singerNames.replace(/\s{2,10}/g, ""); //remove spaces
+            artistNames = artistNames.replace(/\s{2,10}/g, ""); //remove spaces
             songName = songName.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
             songs.push({
                 name: htmlEntities.decode(songName),
-                singer: htmlEntities.decode(singerNames),
+                artist: htmlEntities.decode(artistNames),
                 album: htmlEntities.decode(album),
             });
         }
@@ -29,13 +29,13 @@ module.exports = function findSongs (soup, playlistUser, playlistName) {
         for (let track of tracksInfo) {
             let songName = track.find("div", "songs-list-row__song-name").text;
             console.log(songName);
-            let singerNames = playlistUser; //grab the artist and name from the page headers
+            let artistNames = playlistUser; //grab the artist and name from the page headers
             let album = playlistName;
-            singerNames = singerNames.replace(/\s{2,10}/g, ""); //remove spaces
+            artistNames = artistNames.replace(/\s{2,10}/g, ""); //remove spaces
             songName = songName.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
             songs.push({
                 name: htmlEntities.decode(songName),
-                singer: htmlEntities.decode(singerNames),
+                artist: htmlEntities.decode(artistNames),
                 album: htmlEntities.decode(album),
             });
         }
