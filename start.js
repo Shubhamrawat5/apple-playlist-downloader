@@ -15,8 +15,6 @@ uncomment for to enable
 
 // global.url = "https://music.apple.com/us/album/awakening/350512056"; app(global.url);
 
-
-
 // comment below to disable prompt
 prompt.start();
 
