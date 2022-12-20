@@ -27,7 +27,7 @@ playlist.getPlaylist().then((res) => {
   console.log("Total songs:" + total);
 
   //create folder
-  let dir = __dirname + "/songs";
+  let dir = __dirname + "../songs";
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
