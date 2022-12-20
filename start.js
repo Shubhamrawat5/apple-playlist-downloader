@@ -26,8 +26,13 @@ prompt.get(properties, function (err, result) {
 
   console.log('Command-line input received:');
   console.log('  url: ' + result.url);
+
+  // If a user is signed into Apple music and browsing Apple music albums added to one's library, these are not publically avalaible for Axios to scrape. The URL will not contain any info, for example https://music.apple.com/library/albums/l.1h5jx6A will be a blank page. The only thing we can do is error out. 
+
   if (result.url.indexOf("library/albums") !== -1)  {
-    throw new Error("This is an album part of a user libray. THis script cannot access non public URLs. Try getting the public URL of the album.");
+    console.log("=====================");
+    throw new Error("This is an album part of a user libray. THis script cannot access non public URLs. Try getting the public URL of the album. Hint, use google and search 'Apple Music ARTIST NAME - ALBUM NAME'");
+    console.log("=====================");
   }
   app(result.url);
 
