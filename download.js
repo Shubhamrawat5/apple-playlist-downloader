@@ -8,9 +8,8 @@ const fs = require("fs");
 
 
 module.exports = download = async (song, url, song_name, artist_names, query_artwork) => {
-    console.log ("download info:");
-    console.log("SONG:", song, "ARTIST:", artist_names, "URL:", url);
-
+    //console.log ("download info:");
+    //console.log("SONG:", song, "ARTIST:", artist_names, "URL:", url);
     try {
       let numb = global.index + 1;
       console.log(`(${numb}/${global.total}) Starting download: ${song}`);

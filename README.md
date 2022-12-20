@@ -2,8 +2,9 @@
 
 This is a fork of https://github.com/Shubhamrawat5/apple-playlist-downloader.git
 
-This version adds ability to more easily download from the terminal as it uses a command prompt
+Since the original repo doesn't really explain what's happening, this scrapes an Apple Music webpage and then assembles a list of the songs and uses a 3rd party site to grab the best match it can find of said song. It's a big of a grab bag, most songs are 320 kbps, but the accuracy is not excellent as it'll often find an incorrect version of said song.
 
+This version adds a command prompt and the ability to use Albums (not just user or Apple playlists). 
 
 ## Initial setup
 1. Open cmd/console
@@ -17,20 +18,26 @@ This version adds ability to more easily download from the terminal as it uses a
 Note: after initial setup, just run `node start.js` for all future downloads
 ---
 
-- Now a folder named "songs" will be created.
+Additional info:
 
-- Playlist info will be extract and all the matching songs will start donwloading!
+I've refactored this to be to be less of a mess. It's not ideal by any stretch. For a quick explainer of what's happening:
 
-- If by chance you stop the script in between, then no worries as if song is already downloaded then next time it won't be downloaded again!
+User inputs a URL, Axios (headless browser) goes to the page in question, and scrapes it for the playlist or album song list, and fires off a series of queries to another site sliderkz, to complete the download, then attempts to match the song back with the ID3 information from an Apple Music ID3. 
 
-- Also there is 5% chance that song's some remix or different same name song will get downloaded...
+Beacuse of the quality of the search on sliderkz, this is a bit of a grab bag. Perhaps it can be queried more accurately. This does not back from Apple's servers or require an Apple Music subscription. There isn't going to be any real way to nab Apple's copies via web, even with a Apple Music account as just a quick glance reveals Apple serves it's music as AAC embedded in mp4 which are copy protected and the key is only sent after the requests are made to decrypt the media file.
+
+I've broken apart the file structure to be easier to read and follow as the original program almost entirely depended on one massive JS file. A quick break down:
+
+- start.js - Uses a command prompt wrapper to get a URL from the user
+- app.js - goes to `getPlaylist()` to fire up Axios and then uses JSsoup to mess with the DOM data that's been returned.
+- appleMusicPageLogic - Really should rename this to playlist, this attempts to puzzle out the playlist before passing it to `findSongs()`
+- findSongs - This is a simple script to determine if the URL is an album or playlist, by way of `urlDetect()` and then make the correct scraping from the glob of data that Axios nabbed.
+- urlDetect - A simple script that checks the URL for the correct strings so that `findsongs()` will work properly.
+- GetURL.s - This is where the query is defined for a single song.
+- download.js - This is where the bulk of the logic happens, once a song has been identified
+
 
 ### Screenshots 🚀
 
 <img src = "https://i.ibb.co/jGkBFN6/aaaa.png" width="500"/>
 <img width="831" alt="Capture d’écran 2021-09-26 à 19 16 32" src="https://user-images.githubusercontent.com/44288655/134817487-1a468b63-1e53-4f87-a862-05098813e52b.png">
-
-### Contribute & Issues 🚀
-
-- Feel free to help to improve this tool.
-- Inform if you face any problem.

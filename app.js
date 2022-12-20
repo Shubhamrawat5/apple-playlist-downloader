@@ -4,6 +4,7 @@ module.exports = function app () {
 const fs = require("fs");
 const startDownloading = require("./startDownloading");
 
+//TODO: Globals aren't ideal but refactoring for sanity to first.
 global.index = -1;
 global.songsList = [];
 global.total = 0;

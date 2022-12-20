@@ -4,22 +4,22 @@ const download = require("./download");
 
 
 
-module.exports = getURL = async (song, singer, album, total) => {
+module.exports = getURL = async (song, artist, album, total) => {
     const INFO_URL = "https://slider.kz/vk_auth.php?q=";
     const DOWNLOAD_URL = "https://slider.kz/download/";
 
 
-
-    let query = (singer + "%20" + song).replace(/\s/g, "%20");
+    // This is the querry that goes to slider.kz
+    let query = (artist + "%20" + "%20" + song).replace(/\s/g, "%20");
+    console.log("Original Query", query)
     // console.log(INFO_URL + query);
     const { data } = await axios.get(encodeURI(INFO_URL + query));
   
     // when no result then [{}] is returned so length is always 1, when 1 result then [{id:"",etc:""}]
-    // console.log(encodeURI(INFO_URL + query));
     if (!data["audios"][""] || !data["audios"][""][0].id) {
       //no result
       console.log("==[ SONG NOT FOUND! ]== : " + song);
-      notFound.push(song + " - " + singer);
+      notFound.push(song + " - " + artist);
       startDownloading();
       return;
     }
@@ -58,5 +58,5 @@ module.exports = getURL = async (song, singer, album, total) => {
     link = encodeURI(link); //to replace unescaped characters from link
   
     let artwork_query = encodeURI(track.tit_art + " " + album);
-    download(songName, link, song, singer, artwork_query);
+    download(songName, link, song, artist, artwork_query);
   };
