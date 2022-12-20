@@ -13,7 +13,7 @@ global.notFound = [];
 console.log("STARTING....");
 
 let playlist;
-playlist = require("./appleMusicPageLogic");
+playlist = require("./getPlaylist");
 
 playlist.getPlaylist().then((res) => {
   if (res === "Some Error") {

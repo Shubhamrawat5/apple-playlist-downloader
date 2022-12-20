@@ -7,19 +7,17 @@ const findSongs = require("./findSongs");
 module.exports.getPlaylist = async () => {
   try {
     let playlistObj = {};
-    //let url =  global.url;
-
     const response = await axios.get(global.url);
     let htmlContent = response.data;
     let soup = new JSSoup(htmlContent);
-
+    
     //scraping...
     const playlistHeaderBlock = soup.find("div", "container-detail-header");
     let playlistName, playlistUser;
 
     try {
-      playlistName = playlistHeaderBlock.find("h1").text.trim();
-      playlistUser = playlistHeaderBlock
+        playlistName = playlistHeaderBlock.find("h1").text.trim();
+        playlistUser = playlistHeaderBlock
         .find("p", "headings__subtitles")
         .text.trim();
     } catch (err) {
