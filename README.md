@@ -1,6 +1,6 @@
 ## apple-playlist-downloader 🎵
 
-[✔️ Working as of 04-04-2023]
+[✔️ Working as of 11-06-2023]
 
 1. Open cmd/console
 2. Clone repo by `git clone https://github.com/Shubhamrawat5/apple-playlist-downloader.git`
