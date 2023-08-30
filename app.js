@@ -1,5 +1,4 @@
 const fs = require("fs");
-const request = require("request");
 const ProgressBar = require("progress");
 const axios = require("axios");
 const NodeID3 = require("node-id3");
@@ -15,7 +14,7 @@ let songList = [];
 let totalSongs = 0;
 let notFound = [];
 
-const download = async (
+const downloadSong = async (
   songName,
   singerName,
   songImageUrl,
@@ -58,7 +57,8 @@ const download = async (
         artist: singerName,
         APIC: imageFilePath,
       };
-      const success = NodeID3.write(tags, filepath);
+
+      NodeID3.write(tags, filepath);
       console.log("WRITTEN TAGS");
 
       try {
@@ -66,15 +66,14 @@ const download = async (
       } catch (err) {
         console.error(err);
       }
-      start();
-      //for next song!
+      startNextSong();
     });
 
     //for saving in file...
     data.pipe(fs.createWriteStream(`./songs/${songName}.mp3`));
   } catch (err) {
     console.log("Error:", err);
-    start(); //for next song!
+    startNextSong();
   }
 };
 
@@ -104,7 +103,7 @@ const downloadImage = async (songImageUrl, imageFilePath) => {
   }
 };
 
-const start = async () => {
+const startNextSong = async () => {
   index += 1;
   if (index === totalSongs) {
     console.log("\n#### ALL SONGS ARE DOWNLOADED!! ####\n");
@@ -128,18 +127,24 @@ const start = async () => {
         ") - Song already present!!!!! " +
         songName
     );
-    start(); //next song
+    startNextSong(); //next song
     return;
   }
 
   const songDownloadUrl = await getDownloadLink(songName, singerName);
-
-  download(songName, singerName, songImageUrl, songDownloadUrl);
+  if (songDownloadUrl) {
+    await downloadSong(songName, singerName, songImageUrl, songDownloadUrl);
+  } else {
+    notFound.push(songName + " - " + singerName);
+    startNextSong();
+  }
 };
 
-console.log("STARTING....");
-getPlaylist(playlistUrl)
-  .then((res) => {
+const start = async () => {
+  console.log("STARTING....");
+  try {
+    const res = await getPlaylist(playlistUrl);
+
     console.log("Playlist Name: ", res.playlist);
     console.log("User Name: ", res.user);
     console.log("Total songs: ", res.songs.length + "\n");
@@ -152,8 +157,11 @@ getPlaylist(playlistUrl)
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
-    start();
-  })
-  .catch((err) => {
+
+    startNextSong();
+  } catch (err) {
     console.log(err);
-  });
+  }
+};
+
+start();

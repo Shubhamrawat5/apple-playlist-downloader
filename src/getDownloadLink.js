@@ -1,8 +1,7 @@
 const axios = require("axios");
-const fs = require("fs");
 
 const INFO_URL = "https://slider.kz/vk_auth.php?q=";
-const DOWNLOAD_URL = "https://slider.kz/download/";
+// const DOWNLOAD_URL = "https://slider.kz/download/";
 
 module.exports.getDownloadLink = async (songName, singerName) => {
   let query = (singerName + "%20" + songName).replace(/\s/g, "%20");
@@ -12,9 +11,7 @@ module.exports.getDownloadLink = async (songName, singerName) => {
   if (!data["audios"][""] || !data["audios"][""][0].id) {
     //no result
     console.log("==[ SONG NOT FOUND! ]== : " + songName);
-    notFound.push(songName + " - " + singerName);
-    start();
-    return;
+    return null;
   }
 
   //avoid remix,revisited,mix
