@@ -14,10 +14,10 @@ module.exports.getPlaylist = async (url) => {
 
   data.result.tracks.forEach((track) => {
     playlistObj.songs.push({
-      name: htmlEntities.decode(track.name),
-      singer: htmlEntities.decode(track.artists),
-      duration_ms: track.duration_ms,
-      image: htmlEntities.decode(track.image),
+      songName: htmlEntities.decode(track.name),
+      singerName: htmlEntities.decode(track.artists),
+      durationMs: track.duration_ms,
+      songImageUrl: htmlEntities.decode(track.image),
     });
   });
 

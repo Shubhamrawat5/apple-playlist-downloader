@@ -15,13 +15,18 @@ let songList = [];
 let totalSongs = 0;
 let notFound = [];
 
-const download = async (song, singer, image, link) => {
+const download = async (
+  songName,
+  singerName,
+  songImageUrl,
+  songDownloadUrl
+) => {
   try {
     let numb = index + 1;
-    console.log(`(${numb}/${totalSongs}) Starting download: ${song}`);
+    console.log(`(${numb}/${totalSongs}) Starting download: ${songName}`);
     const { data, headers } = await axios({
       method: "GET",
-      url: link,
+      url: songDownloadUrl,
       responseType: "stream",
     });
 
@@ -39,43 +44,64 @@ const download = async (song, singer, image, link) => {
     );
 
     data.on("data", (chunk) => progressBar.tick(chunk.length));
-    data.on("end", () => {
-      singer = singer.replace(/\s{2,10}/g, "");
-      console.log("   DOWNLOADED!");
-      const filepath = `${__dirname}/songs/${song}.mp3`;
+    data.on("end", async () => {
+      singerName = singerName.replace(/\s{2,10}/g, "");
+      console.log("Song Downloaded!");
+      const filepath = `./songs/${songName}.mp3`;
 
-      let query_artwork_file = `${__dirname}/songs/${song}.jpg`;
+      let imageFilePath = `./songs/${songName}.jpg`;
 
-      download_artwork(image, query_artwork_file, function () {
-        const tags = {
-          title: song,
-          artist: singer,
-          APIC: query_artwork_file,
-        };
-        const success = NodeID3.write(tags, filepath);
-        console.log("WRITTEN TAGS");
-        try {
-          fs.unlinkSync(query_artwork_file);
-        } catch (err) {
-          console.error(err);
-        }
-        start();
-        //for next song!
-      });
+      await downloadImage(songImageUrl, imageFilePath);
+
+      const tags = {
+        title: songName,
+        artist: singerName,
+        APIC: imageFilePath,
+      };
+      const success = NodeID3.write(tags, filepath);
+      console.log("WRITTEN TAGS");
+
+      try {
+        fs.unlinkSync(imageFilePath);
+      } catch (err) {
+        console.error(err);
+      }
+      start();
+      //for next song!
     });
 
     //for saving in file...
-    data.pipe(fs.createWriteStream(`${__dirname}/songs/${song}.mp3`));
+    data.pipe(fs.createWriteStream(`./songs/${songName}.mp3`));
   } catch (err) {
     console.log("Error:", err);
     start(); //for next song!
   }
 };
 
-const download_artwork = function (uri, filename, callback) {
-  request.head(uri, function (err, res, body) {
-    request(uri).pipe(fs.createWriteStream(filename)).on("close", callback);
-  });
+const downloadImage = async (songImageUrl, imageFilePath) => {
+  try {
+    const response = await axios({
+      method: "GET",
+      url: songImageUrl,
+      responseType: "stream",
+    });
+
+    // Create a write stream to save the image
+    const writer = fs.createWriteStream(imageFilePath);
+
+    // Pipe the response data into the writer stream
+    response.data.pipe(writer);
+
+    // Wait for the image to finish downloading
+    await new Promise((resolve, reject) => {
+      writer.on("finish", resolve);
+      writer.on("error", reject);
+    });
+
+    console.log("Image downloaded!");
+  } catch (error) {
+    console.error("Error downloading image:", error.message);
+  }
 };
 
 const start = async () => {
@@ -91,26 +117,24 @@ const start = async () => {
     if (i === 1) console.log("None!");
     return;
   }
-  let song = songList[index].name;
-  let singer = songList[index].singer;
-  let image = songList[index].image;
+  const { songName, singerName, songImageUrl } = songList[index];
 
-  if (fs.existsSync(__dirname + "/songs/" + song + ".mp3")) {
+  if (fs.existsSync("./songs/" + songName + ".mp3")) {
     console.log(
       "(" +
         (index + 1) +
         "/" +
         totalSongs +
         ") - Song already present!!!!! " +
-        song
+        songName
     );
     start(); //next song
     return;
   }
 
-  const link = await getDownloadLink(song, singer);
+  const songDownloadUrl = await getDownloadLink(songName, singerName);
 
-  download(song, singer, image, link);
+  download(songName, singerName, songImageUrl, songDownloadUrl);
 };
 
 console.log("STARTING....");
@@ -124,7 +148,7 @@ getPlaylist(playlistUrl)
     totalSongs = res.songs.length;
 
     //create folder
-    let dir = __dirname + "/songs";
+    let dir = "./songs";
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }

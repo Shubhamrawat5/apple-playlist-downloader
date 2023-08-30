@@ -4,17 +4,15 @@ const fs = require("fs");
 const INFO_URL = "https://slider.kz/vk_auth.php?q=";
 const DOWNLOAD_URL = "https://slider.kz/download/";
 
-module.exports.getDownloadLink = async (song, singer) => {
-  let query = (singer + "%20" + song).replace(/\s/g, "%20");
-  // console.log(INFO_URL + query);
+module.exports.getDownloadLink = async (songName, singerName) => {
+  let query = (singerName + "%20" + songName).replace(/\s/g, "%20");
   const { data } = await axios.get(encodeURI(INFO_URL + query));
 
   // when no result then [{}] is returned so length is always 1, when 1 result then [{id:"",etc:""}]
-  // console.log(encodeURI(INFO_URL + query));
   if (!data["audios"][""] || !data["audios"][""][0].id) {
     //no result
-    console.log("==[ SONG NOT FOUND! ]== : " + song);
-    notFound.push(song + " - " + singer);
+    console.log("==[ SONG NOT FOUND! ]== : " + songName);
+    notFound.push(songName + " - " + singerName);
     start();
     return;
   }
