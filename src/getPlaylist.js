@@ -16,7 +16,7 @@ module.exports.getPlaylist = async (url) => {
     playlistObj.songs.push({
       songName: htmlEntities.decode(track.name),
       singerName: htmlEntities.decode(track.artists),
-      durationMs: track.duration_ms,
+      songDurationSec: Math.trunc(track.duration_ms / 1000),
       songImageUrl: htmlEntities.decode(track.image),
     });
   });

@@ -116,26 +116,27 @@ const startNextSong = async () => {
     if (i === 1) console.log("None!");
     return;
   }
-  const { songName, singerName, songImageUrl } = songList[index];
 
-  if (fs.existsSync("./songs/" + songName + ".mp3")) {
+  const { songName, singerName, songImageUrl, songDurationSec } =
+    songList[index];
+
+  if (fs.existsSync(`./songs/${songName}.mp3`)) {
     console.log(
-      "(" +
-        (index + 1) +
-        "/" +
-        totalSongs +
-        ") - Song already present!!!!! " +
-        songName
+      `(${index + 1}/${totalSongs}) - Song already present!! ${songName}`
     );
     startNextSong(); //next song
     return;
   }
 
-  const songDownloadUrl = await getDownloadLink(songName, singerName);
+  const songDownloadUrl = await getDownloadLink(
+    songName,
+    singerName,
+    songDurationSec
+  );
   if (songDownloadUrl) {
     await downloadSong(songName, singerName, songImageUrl, songDownloadUrl);
   } else {
-    notFound.push(songName + " - " + singerName);
+    notFound.push(`${songName} - ${singerName}`);
     startNextSong();
   }
 };
