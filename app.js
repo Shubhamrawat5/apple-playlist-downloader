@@ -3,22 +3,25 @@ const request = require("request");
 const ProgressBar = require("progress");
 const axios = require("axios");
 const NodeID3 = require("node-id3");
-const itunesAPI = require("node-itunes-search");
 
-const INFO_URL = "https://slider.kz/vk_auth.php?q=";
-const DOWNLOAD_URL = "https://slider.kz/download/";
+const { getPlaylist } = require("./src/getPlaylist");
+const { getDownloadLink } = require("./src/getDownloadLink");
+
+const playlistUrl =
+  "https://music.apple.com/fi/playlist/one-direction-essentials/pl.134ef3b46d32414e9b4b5a995a2f3ea7"; //put your playlist url
+
 let index = -1;
-let songsList = [];
-let total = 0;
+let songList = [];
+let totalSongs = 0;
 let notFound = [];
 
-const download = async (song, url, song_name, singer_names, image) => {
+const download = async (song, singer, image, link) => {
   try {
     let numb = index + 1;
-    console.log(`(${numb}/${total}) Starting download: ${song}`);
+    console.log(`(${numb}/${totalSongs}) Starting download: ${song}`);
     const { data, headers } = await axios({
       method: "GET",
-      url: url,
+      url: link,
       responseType: "stream",
     });
 
@@ -37,20 +40,18 @@ const download = async (song, url, song_name, singer_names, image) => {
 
     data.on("data", (chunk) => progressBar.tick(chunk.length));
     data.on("end", () => {
-      singer_names = singer_names.replace(/\s{2,10}/g, "");
-      console.log("DOWNLOADED!");
+      singer = singer.replace(/\s{2,10}/g, "");
+      console.log("   DOWNLOADED!");
       const filepath = `${__dirname}/songs/${song}.mp3`;
 
       let query_artwork_file = `${__dirname}/songs/${song}.jpg`;
 
       download_artwork(image, query_artwork_file, function () {
-        console.log("Artwork downloaded");
         const tags = {
-          title: song_name,
-          artist: singer_names,
+          title: song,
+          artist: singer,
           APIC: query_artwork_file,
         };
-        console.log(tags);
         const success = NodeID3.write(tags, filepath);
         console.log("WRITTEN TAGS");
         try {
@@ -58,152 +59,28 @@ const download = async (song, url, song_name, singer_names, image) => {
         } catch (err) {
           console.error(err);
         }
-        startDownloading();
+        start();
         //for next song!
       });
-
-      //Replace all connectives by a simple ','
-      // singer_names = singer_names.replace(" and ", ", ");
-      // singer_names = singer_names.replace(" et ", ", ");
-      // singer_names = singer_names.replace(" und ", ", ");
-      //Search track informations using the Itunes library
-      // const searchOptions = new itunesAPI.ItunesSearchOptions({
-      //   term: query_artwork, // All searches require a single string query.
-      //   limit: 1, // An optional maximum number of returned results may be specified.
-      // });
-      //Use the result to extract tags
-      // itunesAPI.searchItunes(searchOptions).then((result) => {
-      //   try {
-      //     // Get all the tags and cover art of the track using node-itunes-search and write them with node-id3
-      //     let maxres = result.results[0]["artworkUrl100"].replace(
-      //       "100x100",
-      //       "3000x3000"
-      //     );
-      //     let year = result.results[0]["releaseDate"].substring(0, 4);
-      //     let genre = result.results[0]["primaryGenreName"].replace(
-      //       /\?|<|>|\*|"|:|\||\/|\\/g,
-      //       ""
-      //     );
-      //     let trackNumber = result.results[0]["trackNumber"];
-      //     let trackCount = result.results[0]["trackCount"];
-      //     trackNumber = trackNumber + "/" + trackCount;
-      //     let album = result.results[0]["collectionName"].replace(
-      //       /\?|<|>|\*|"|:|\||\/|\\/g,
-      //       ""
-      //     );
-      //     //console.log(genre);
-      //     //console.log(year);
-      //     //console.log(trackNumber);
-      //     //console.log(album);
-      //     //console.log(maxres);
-      //     let query_artwork_file = song + ".jpg";
-      //     download_artwork(maxres, query_artwork_file, function () {
-      //       console.log("Artwork downloaded");
-      //       const tags = {
-      //         TALB: album,
-      //         title: song_name,
-      //         artist: singer_names,
-      //         APIC: query_artwork_file,
-      //         year: year,
-      //         trackNumber: trackNumber,
-      //         genre: genre,
-      //       };
-      //       console.log(tags);
-      //       const success = NodeID3.write(tags, filepath);
-      //       console.log("WRITTEN TAGS");
-      //       try {
-      //         // fs.unlinkSync(query_artwork_file);
-      //         //file removed
-      //       } catch (err) {
-      //         console.error(err);
-      //       }
-      //       startDownloading();
-      //       //for next song!
-      //     });
-      //   } catch {
-      //     console.log("Full tags not found for " + song_name);
-      //     const tags = {
-      //       title: song_name,
-      //       artist: singer_names,
-      //     };
-      //     //console.log(tags);
-      //     const success = NodeID3.write(tags, filepath);
-      //     console.log("WRITTEN TAGS (Only artist name and track title)");
-      //     startDownloading();
-      //   }
-      // });
     });
 
     //for saving in file...
     data.pipe(fs.createWriteStream(`${__dirname}/songs/${song}.mp3`));
   } catch (err) {
     console.log("Error:", err);
-    startDownloading(); //for next song!
+    start(); //for next song!
   }
 };
 
 const download_artwork = function (uri, filename, callback) {
   request.head(uri, function (err, res, body) {
-    //console.log('content-type:', res.headers['content-type']);
-    //console.log('content-length:', res.headers['content-length']);
-
     request(uri).pipe(fs.createWriteStream(filename)).on("close", callback);
   });
 };
 
-const getURL = async (song, singer, image) => {
-  let query = (singer + "%20" + song).replace(/\s/g, "%20");
-  // console.log(INFO_URL + query);
-  const { data } = await axios.get(encodeURI(INFO_URL + query));
-
-  // when no result then [{}] is returned so length is always 1, when 1 result then [{id:"",etc:""}]
-  // console.log(encodeURI(INFO_URL + query));
-  if (!data["audios"][""] || !data["audios"][""][0].id) {
-    //no result
-    console.log("==[ SONG NOT FOUND! ]== : " + song);
-    notFound.push(song + " - " + singer);
-    startDownloading();
-    return;
-  }
-
-  //avoid remix,revisited,mix
-  let i = 0;
-  let track = data["audios"][""][i];
-  let totalTracks = data["audios"][""].length;
-  while (i < totalTracks && /remix|revisited|reverb|mix/i.test(track.tit_art)) {
-    i += 1;
-    track = data["audios"][""][i];
-  }
-  //if reach the end then select the first song
-  if (!track) {
-    track = data["audios"][""][0];
-  }
-
-  let songName = track.tit_art.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name
-
-  if (fs.existsSync(__dirname + "/songs/" + songName + ".mp3")) {
-    let numb = index + 1;
-    console.log(
-      "(" + numb + "/" + total + ") - Song already present!!!!! " + song
-    );
-    startDownloading(); //next song
-    return;
-  }
-
-  // let link = DOWNLOAD_URL + track.id + "/";
-  // link = link + track.duration + "/";
-  // link = link + track.url + "/";
-  // link = link + songName + ".mp3" + "?extra=";
-  // link = link + track.extra;
-  let link = track.url;
-  link = encodeURI(link); //to replace unescaped characters from link
-
-  download(songName, link, song, singer, image);
-};
-
-const startDownloading = () => {
+const start = async () => {
   index += 1;
-  if (index === songsList.length) {
+  if (index === totalSongs) {
     console.log("\n#### ALL SONGS ARE DOWNLOADED!! ####\n");
     console.log("Songs that are not found:-");
     let i = 1;
@@ -214,26 +91,44 @@ const startDownloading = () => {
     if (i === 1) console.log("None!");
     return;
   }
-  let song = songsList[index].name;
-  let singer = songsList[index].singer;
-  let image = songsList[index].image;
-  getURL(song, singer, image);
+  let song = songList[index].name;
+  let singer = songList[index].singer;
+  let image = songList[index].image;
+
+  if (fs.existsSync(__dirname + "/songs/" + song + ".mp3")) {
+    console.log(
+      "(" +
+        (index + 1) +
+        "/" +
+        totalSongs +
+        ") - Song already present!!!!! " +
+        song
+    );
+    start(); //next song
+    return;
+  }
+
+  const link = await getDownloadLink(song, singer);
+
+  download(song, singer, image, link);
 };
 
 console.log("STARTING....");
-let playlist = require("./apple_playlist");
-playlist
-  .getPlaylist()
+getPlaylist(playlistUrl)
   .then((res) => {
-    songsList = res.songs;
-    total = res.total;
+    console.log("Playlist Name: ", res.playlist);
+    console.log("User Name: ", res.user);
+    console.log("Total songs: ", res.songs.length + "\n");
+
+    songList = res.songs;
+    totalSongs = res.songs.length;
 
     //create folder
     let dir = __dirname + "/songs";
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
-    startDownloading();
+    start();
   })
   .catch((err) => {
     console.log(err);

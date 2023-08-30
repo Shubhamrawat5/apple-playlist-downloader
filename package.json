@@ -4,7 +4,8 @@
   "description": "To download apple music playlist songs",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "author": "Shubham Rawat",
   "license": "ISC",
@@ -13,7 +14,6 @@
     "html-entities": "^2.1.0",
     "jssoup": "0.0.12",
     "node-id3": "^0.2.3",
-    "node-itunes-search": "^1.2.2",
     "progress": "^2.0.3",
     "request": "^2.88.2"
   }
