@@ -12,7 +12,7 @@ let songsList = [];
 let total = 0;
 let notFound = [];
 
-const download = async (song, url, song_name, singer_names, query_artwork) => {
+const download = async (song, url, song_name, singer_names, image) => {
   try {
     let numb = index + 1;
     console.log(`(${numb}/${total}) Starting download: ${song}`);
@@ -40,76 +40,98 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
       singer_names = singer_names.replace(/\s{2,10}/g, "");
       console.log("DOWNLOADED!");
       const filepath = `${__dirname}/songs/${song}.mp3`;
-      //Replace all connectives by a simple ','
-      singer_names = singer_names.replace(" and ", ", ");
-      singer_names = singer_names.replace(" et ", ", ");
-      singer_names = singer_names.replace(" und ", ", ");
-      //Search track informations using the Itunes library
-      const searchOptions = new itunesAPI.ItunesSearchOptions({
-        term: query_artwork, // All searches require a single string query.
-        limit: 1, // An optional maximum number of returned results may be specified.
-      });
-      //Use the result to extract tags
-      itunesAPI.searchItunes(searchOptions).then((result) => {
+
+      let query_artwork_file = `${__dirname}/songs/${song}.jpg`;
+
+      download_artwork(image, query_artwork_file, function () {
+        console.log("Artwork downloaded");
+        const tags = {
+          title: song_name,
+          artist: singer_names,
+          APIC: query_artwork_file,
+        };
+        console.log(tags);
+        const success = NodeID3.write(tags, filepath);
+        console.log("WRITTEN TAGS");
         try {
-          // Get all the tags and cover art of the track using node-itunes-search and write them with node-id3
-          let maxres = result.results[0]["artworkUrl100"].replace(
-            "100x100",
-            "3000x3000"
-          );
-          let year = result.results[0]["releaseDate"].substring(0, 4);
-          let genre = result.results[0]["primaryGenreName"].replace(
-            /\?|<|>|\*|"|:|\||\/|\\/g,
-            ""
-          );
-          let trackNumber = result.results[0]["trackNumber"];
-          let trackCount = result.results[0]["trackCount"];
-          trackNumber = trackNumber + "/" + trackCount;
-          let album = result.results[0]["collectionName"].replace(
-            /\?|<|>|\*|"|:|\||\/|\\/g,
-            ""
-          );
-          //console.log(genre);
-          //console.log(year);
-          //console.log(trackNumber);
-          //console.log(album);
-          //console.log(maxres);
-          let query_artwork_file = song + ".jpg";
-          download_artwork(maxres, query_artwork_file, function () {
-            //console.log('Artwork downloaded');
-            const tags = {
-              TALB: album,
-              title: song_name,
-              artist: singer_names,
-              APIC: query_artwork_file,
-              year: year,
-              trackNumber: trackNumber,
-              genre: genre,
-            };
-            //console.log(tags);
-            const success = NodeID3.write(tags, filepath);
-            console.log("WRITTEN TAGS");
-            try {
-              fs.unlinkSync(query_artwork_file);
-              //file removed
-            } catch (err) {
-              console.error(err);
-            }
-            startDownloading();
-            //for next song!
-          });
-        } catch {
-          console.log("Full tags not found for " + song_name);
-          const tags = {
-            title: song_name,
-            artist: singer_names,
-          };
-          //console.log(tags);
-          const success = NodeID3.write(tags, filepath);
-          console.log("WRITTEN TAGS (Only artist name and track title)");
-          startDownloading();
+          fs.unlinkSync(query_artwork_file);
+        } catch (err) {
+          console.error(err);
         }
+        startDownloading();
+        //for next song!
       });
+
+      //Replace all connectives by a simple ','
+      // singer_names = singer_names.replace(" and ", ", ");
+      // singer_names = singer_names.replace(" et ", ", ");
+      // singer_names = singer_names.replace(" und ", ", ");
+      //Search track informations using the Itunes library
+      // const searchOptions = new itunesAPI.ItunesSearchOptions({
+      //   term: query_artwork, // All searches require a single string query.
+      //   limit: 1, // An optional maximum number of returned results may be specified.
+      // });
+      //Use the result to extract tags
+      // itunesAPI.searchItunes(searchOptions).then((result) => {
+      //   try {
+      //     // Get all the tags and cover art of the track using node-itunes-search and write them with node-id3
+      //     let maxres = result.results[0]["artworkUrl100"].replace(
+      //       "100x100",
+      //       "3000x3000"
+      //     );
+      //     let year = result.results[0]["releaseDate"].substring(0, 4);
+      //     let genre = result.results[0]["primaryGenreName"].replace(
+      //       /\?|<|>|\*|"|:|\||\/|\\/g,
+      //       ""
+      //     );
+      //     let trackNumber = result.results[0]["trackNumber"];
+      //     let trackCount = result.results[0]["trackCount"];
+      //     trackNumber = trackNumber + "/" + trackCount;
+      //     let album = result.results[0]["collectionName"].replace(
+      //       /\?|<|>|\*|"|:|\||\/|\\/g,
+      //       ""
+      //     );
+      //     //console.log(genre);
+      //     //console.log(year);
+      //     //console.log(trackNumber);
+      //     //console.log(album);
+      //     //console.log(maxres);
+      //     let query_artwork_file = song + ".jpg";
+      //     download_artwork(maxres, query_artwork_file, function () {
+      //       console.log("Artwork downloaded");
+      //       const tags = {
+      //         TALB: album,
+      //         title: song_name,
+      //         artist: singer_names,
+      //         APIC: query_artwork_file,
+      //         year: year,
+      //         trackNumber: trackNumber,
+      //         genre: genre,
+      //       };
+      //       console.log(tags);
+      //       const success = NodeID3.write(tags, filepath);
+      //       console.log("WRITTEN TAGS");
+      //       try {
+      //         // fs.unlinkSync(query_artwork_file);
+      //         //file removed
+      //       } catch (err) {
+      //         console.error(err);
+      //       }
+      //       startDownloading();
+      //       //for next song!
+      //     });
+      //   } catch {
+      //     console.log("Full tags not found for " + song_name);
+      //     const tags = {
+      //       title: song_name,
+      //       artist: singer_names,
+      //     };
+      //     //console.log(tags);
+      //     const success = NodeID3.write(tags, filepath);
+      //     console.log("WRITTEN TAGS (Only artist name and track title)");
+      //     startDownloading();
+      //   }
+      // });
     });
 
     //for saving in file...
@@ -119,6 +141,7 @@ const download = async (song, url, song_name, singer_names, query_artwork) => {
     startDownloading(); //for next song!
   }
 };
+
 const download_artwork = function (uri, filename, callback) {
   request.head(uri, function (err, res, body) {
     //console.log('content-type:', res.headers['content-type']);
@@ -127,7 +150,8 @@ const download_artwork = function (uri, filename, callback) {
     request(uri).pipe(fs.createWriteStream(filename)).on("close", callback);
   });
 };
-const getURL = async (song, singer, album) => {
+
+const getURL = async (song, singer, image) => {
   let query = (singer + "%20" + song).replace(/\s/g, "%20");
   // console.log(INFO_URL + query);
   const { data } = await axios.get(encodeURI(INFO_URL + query));
@@ -174,8 +198,7 @@ const getURL = async (song, singer, album) => {
   let link = track.url;
   link = encodeURI(link); //to replace unescaped characters from link
 
-  let artwork_query = encodeURI(track.tit_art + " " + album);
-  download(songName, link, song, singer, artwork_query);
+  download(songName, link, song, singer, image);
 };
 
 const startDownloading = () => {
@@ -193,8 +216,8 @@ const startDownloading = () => {
   }
   let song = songsList[index].name;
   let singer = songsList[index].singer;
-  let album = songsList[index].album;
-  getURL(song, singer, album);
+  let image = songsList[index].image;
+  getURL(song, singer, image);
 };
 
 console.log("STARTING....");
