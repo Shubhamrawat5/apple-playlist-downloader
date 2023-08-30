@@ -18,7 +18,8 @@ const downloadSong = async (
   songName,
   singerName,
   songImageUrl,
-  songDownloadUrl
+  songDownloadUrl,
+  songTitleFound
 ) => {
   try {
     let numb = index + 1;
@@ -28,6 +29,8 @@ const downloadSong = async (
       url: songDownloadUrl,
       responseType: "stream",
     });
+
+    const filepath = `./songs/${songTitleFound}.mp3`;
 
     //for progress bar...
     const totalLength = headers["content-length"];
@@ -46,9 +49,8 @@ const downloadSong = async (
     data.on("end", async () => {
       singerName = singerName.replace(/\s{2,10}/g, "");
       console.log("Song Downloaded!");
-      const filepath = `./songs/${songName}.mp3`;
 
-      let imageFilePath = `./songs/${songName}.jpg`;
+      let imageFilePath = `./songs/${songTitleFound}.jpg`;
 
       await downloadImage(songImageUrl, imageFilePath);
 
@@ -70,7 +72,7 @@ const downloadSong = async (
     });
 
     //for saving in file...
-    data.pipe(fs.createWriteStream(`./songs/${songName}.mp3`));
+    data.pipe(fs.createWriteStream(filepath));
   } catch (err) {
     console.log("Error:", err);
     startNextSong();
@@ -120,21 +122,27 @@ const startNextSong = async () => {
   const { songName, singerName, songImageUrl, songDurationSec } =
     songList[index];
 
-  if (fs.existsSync(`./songs/${songName}.mp3`)) {
-    console.log(
-      `(${index + 1}/${totalSongs}) - Song already present!! ${songName}`
-    );
-    startNextSong(); //next song
-    return;
-  }
-
-  const songDownloadUrl = await getDownloadLink(
+  const { songDownloadUrl, songTitleFound } = await getDownloadLink(
     songName,
     singerName,
     songDurationSec
   );
-  if (songDownloadUrl) {
-    await downloadSong(songName, singerName, songImageUrl, songDownloadUrl);
+
+  if (songDownloadUrl && songTitleFound) {
+    if (fs.existsSync(`./songs/${songTitleFound}.mp3`)) {
+      console.log(
+        `(${index + 1}/${totalSongs}) - Song already present!! ${songName}`
+      );
+      startNextSong(); //next song
+      return;
+    }
+    await downloadSong(
+      songName,
+      singerName,
+      songImageUrl,
+      songDownloadUrl,
+      songTitleFound
+    );
   } else {
     notFound.push(`${songName} - ${singerName}`);
     startNextSong();

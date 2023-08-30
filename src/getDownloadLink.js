@@ -33,15 +33,20 @@ module.exports.getDownloadLink = async (
   // }
 
   const songs = data["audios"][""];
-  let link = null;
+  let songDownloadUrl = null;
+  let songTitleFound = null;
 
   // Find by duration of song
   for (let i = 0; i < songs.length; i++) {
     if (songDurationSec === songs[i].duration) {
-      link = encodeURI(songs[i].url); // to replace unescaped characters from link
+      songDownloadUrl = encodeURI(songs[i].url); // to replace unescaped characters from link
+      songTitleFound = songs[i].tit_art.replace(/\?|<|>|\*|"|:|\||\/|\\/g, ""); //removing special characters which are not allowed in file name;
       break;
     }
   }
 
-  return link;
+  if (songDownloadUrl && songTitleFound) {
+    return { songDownloadUrl, songTitleFound };
+  }
+  return null;
 };
