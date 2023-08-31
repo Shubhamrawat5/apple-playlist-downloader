@@ -120,13 +120,14 @@ const startNextSong = async () => {
   const { songName, singerName, songImageUrl, songDurationSec } =
     songList[index];
 
-  const { songDownloadUrl, songTitleFound } = await getDownloadLink(
+  const res = await getDownloadLink(
     songName,
     singerName,
     songDurationSec
   );
 
-  if (songDownloadUrl && songTitleFound) {
+  if (res) {
+    const { songDownloadUrl, songTitleFound } = res;
     if (fs.existsSync(`./songs/${songTitleFound}.mp3`)) {
       console.log(
         `\n(${index + 1}/${totalSongs}) - Song already present!! ${songName}`
