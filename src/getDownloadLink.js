@@ -14,8 +14,6 @@ module.exports.getDownloadLink = async (
 
   // when no result then [{}] is returned so length is always 1, when 1 result then [{id:"",etc:""}]
   if (!data["audios"][""] || !data["audios"][""][0].id) {
-    //no result
-    console.log("==[ SONG NOT FOUND! ]== : " + songName);
     return null;
   }
 
