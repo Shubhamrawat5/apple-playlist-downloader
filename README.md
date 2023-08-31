@@ -6,8 +6,10 @@
 2. Clone repo - `git clone https://github.com/Shubhamrawat5/apple-playlist-downloader.git`
 3. Open directory - `cd apple-playlist-downloader`
 4. Install all dependencies - `npm install`
-5. Now edit playlist url variable and set your playlist link in file `app.js [line 10]`
-6. Run `npm start`
+5. Run `npm start`
+6. It'll ask for playlist url, paste it and press enter.
+
+Dummy Playlist_URL: `https://music.apple.com/fi/playlist/one-direction-essentials/pl.134ef3b46d32414e9b4b5a995a2f3ea7`
 
 - Now a folder "songs" will be created.
 - Playlist info will be extract and all the matching songs will start donwloading!
@@ -17,7 +19,7 @@
 ## Screenshots 🚀
 
 <img src = "https://i.ibb.co/jGkBFN6/aaaa.png" width="500"/>
-<img width="831" alt="Capture d’écran 2021-09-26 à 19 16 32" src="https://user-images.githubusercontent.com/44288655/134817487-1a468b63-1e53-4f87-a862-05098813e52b.png">
+<img width="820" alt="Capture d’écran 2021-09-26 à 19 16 32" src="https://user-images.githubusercontent.com/44288655/134817487-1a468b63-1e53-4f87-a862-05098813e52b.png">
 
 ## Contribute & Issues 🚀
 

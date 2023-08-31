@@ -2,12 +2,10 @@ const fs = require("fs");
 const ProgressBar = require("progress");
 const axios = require("axios");
 const NodeID3 = require("node-id3");
+const prompt = require("prompt");
 
 const { getPlaylist } = require("./src/getPlaylist");
 const { getDownloadLink } = require("./src/getDownloadLink");
-
-const playlistUrl =
-  "https://music.apple.com/fi/playlist/one-direction-essentials/pl.134ef3b46d32414e9b4b5a995a2f3ea7"; //put your playlist url
 
 let index = -1;
 let songList = [];
@@ -150,13 +148,12 @@ const startNextSong = async () => {
 };
 
 const start = async () => {
-  console.log("STARTING....");
-  try {
-    const res = await getPlaylist(playlistUrl);
+  prompt.start();
+  const { Playlist_URL } = await prompt.get(["Playlist_URL"]);
+  // "https://music.apple.com/fi/playlist/one-direction-essentials/pl.134ef3b46d32414e9b4b5a995a2f3ea7";
 
-    console.log("Playlist Name: ", res.playlist);
-    console.log("User Name: ", res.user);
-    console.log("Total songs: ", res.songs.length + "\n");
+  try {
+    const res = await getPlaylist(Playlist_URL);
 
     songList = res.songs;
     totalSongs = res.songs.length;
