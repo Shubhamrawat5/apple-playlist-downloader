@@ -1,6 +1,6 @@
 # apple-playlist-downloader 🎵
 
-[✔️ Working as of 30-08-2023]
+[✔️ Working as of 01-09-2023]
 
 1. Open cmd/console
 2. Clone repo - `git clone https://github.com/Shubhamrawat5/apple-playlist-downloader.git`
@@ -18,8 +18,7 @@ Dummy Playlist_URL: `https://music.apple.com/fi/playlist/one-direction-essential
 
 ## Screenshots 🚀
 
-<img src = "https://i.ibb.co/jGkBFN6/aaaa.png" width="500"/>
-<img width="820" alt="Capture d’écran 2021-09-26 à 19 16 32" src="https://user-images.githubusercontent.com/44288655/134817487-1a468b63-1e53-4f87-a862-05098813e52b.png">
+<img src = "https://i.ibb.co/YdFVKM9/Screenshot-2023-08-31-125010.png" />
 
 ## Contribute & Issues 🚀
 

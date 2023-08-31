@@ -11,8 +11,6 @@ module.exports.getPlaylist = async (url) => {
   playlistObj.playlist = htmlEntities.decode(data.result.name);
   playlistObj.user = htmlEntities.decode(data.result.owner);
 
-  console.log("Playlist Name: ", playlistObj.playlist);
-  console.log("User Name: ", playlistObj.user);
   playlistObj.songs = [];
 
   data.result.tracks.forEach((track) => {
@@ -23,8 +21,6 @@ module.exports.getPlaylist = async (url) => {
       songImageUrl: htmlEntities.decode(track.image),
     });
   });
-
-  console.log("Total songs: ", playlistObj.songs.length + "\n");
 
   return playlistObj;
 };

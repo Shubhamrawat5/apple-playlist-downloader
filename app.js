@@ -21,7 +21,7 @@ const downloadSong = async (
 ) => {
   try {
     let numb = index + 1;
-    console.log(`(${numb}/${totalSongs}) Starting download: ${songName}`);
+    console.log(`\n(${numb}/${totalSongs}) Starting download: ${songName}`);
     const { data, headers } = await axios({
       method: "GET",
       url: songDownloadUrl,
@@ -129,7 +129,7 @@ const startNextSong = async () => {
   if (songDownloadUrl && songTitleFound) {
     if (fs.existsSync(`./songs/${songTitleFound}.mp3`)) {
       console.log(
-        `(${index + 1}/${totalSongs}) - Song already present!! ${songName}`
+        `\n(${index + 1}/${totalSongs}) - Song already present!! ${songName}`
       );
       startNextSong(); //next song
       return;
@@ -154,6 +154,9 @@ const start = async () => {
 
   try {
     const res = await getPlaylist(Playlist_URL);
+    console.log("Playlist Name: ", res.playlist);
+    console.log("User Name: ", res.user);
+    console.log("Total songs: ", res.songs.length);
 
     songList = res.songs;
     totalSongs = res.songs.length;
