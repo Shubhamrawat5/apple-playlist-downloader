@@ -21,8 +21,8 @@ module.exports.getPlaylist = async (url) => {
       songImageUrl: htmlEntities.decode(track.image),
     });
   });
-  const axios = require("axios");
-  const htmlEntities = require("html-entities");
+  // const axios = require("axios");
+  // const htmlEntities = require("html-entities");
 
   module.exports.getPlaylist = async (url) => {
     let playlistObj = {};
