@@ -3,6 +3,8 @@ const ProgressBar = require("progress");
 const axios = require("axios");
 const NodeID3 = require("node-id3");
 const prompt = require("prompt");
+const youtubedl = require("youtube-dl-exec");
+// var ProgressBar = require("progress");
 
 const { getPlaylist } = require("./src/getPlaylist");
 const { getDownloadLink } = require("./src/getDownloadLink");
@@ -15,9 +17,10 @@ let notFound = [];
 const downloadSong = async (
   songName,
   singerName,
-  songImageUrl,
+  // songImageUrl,
   songDownloadUrl,
   songTitleFound
+  // songDurationSec
 ) => {
   try {
     let numb = index + 1;
@@ -28,78 +31,36 @@ const downloadSong = async (
       responseType: "stream",
     });
 
-    const filepath = `./songs/${songTitleFound}.mp3`;
-
-    //for progress bar...
-    const totalLength = headers["content-length"];
-    const progressBar = new ProgressBar(
-      "-> downloading [:bar] :percent :etas",
-      {
-        width: 40,
-        complete: "=",
-        incomplete: " ",
-        renderThrottle: 1,
-        total: parseInt(totalLength),
+    var bar = new ProgressBar("[:bar]  :percent :etas ", {
+      total: 45,
+    });
+    var timer = setInterval(function () {
+      bar.tick();
+      if (bar.complete) {
+        console.log(`\n ${songTitleFound} - Downloaded\n`);
+        clearInterval(timer);
       }
-    );
+    }, 100);
 
-    data.on("data", (chunk) => progressBar.tick(chunk.length));
     data.on("end", async () => {
       singerName = singerName.replace(/\s{2,10}/g, "");
       console.log("Song Downloaded!");
 
-      let imageFilePath = `./songs/${songTitleFound}.jpg`;
-
-      await downloadImage(songImageUrl, imageFilePath);
-
-      const tags = {
-        title: songName,
-        artist: singerName,
-        APIC: imageFilePath,
-      };
-
-      NodeID3.write(tags, filepath);
-      console.log("WRITTEN TAGS");
-
-      try {
-        fs.unlinkSync(imageFilePath);
-      } catch (err) {
-        console.error(err);
-      }
       startNextSong();
     });
 
     //for saving in file...
-    data.pipe(fs.createWriteStream(filepath));
+
+    await youtubedl(songDownloadUrl, {
+      format: "m4a",
+      output: "./songs/" + songTitleFound + ".mp3",
+      maxFilesize: "104857600",
+      preferFreeFormats: true,
+    });
+    startNextSong();
   } catch (err) {
     console.log("Error:", err);
     startNextSong();
-  }
-};
-
-const downloadImage = async (songImageUrl, imageFilePath) => {
-  try {
-    const response = await axios({
-      method: "GET",
-      url: songImageUrl,
-      responseType: "stream",
-    });
-
-    // Create a write stream to save the image
-    const writer = fs.createWriteStream(imageFilePath);
-
-    // Pipe the response data into the writer stream
-    response.data.pipe(writer);
-
-    // Wait for the image to finish downloading
-    await new Promise((resolve, reject) => {
-      writer.on("finish", resolve);
-      writer.on("error", reject);
-    });
-
-    console.log("Image downloaded!");
-  } catch (error) {
-    console.error("Error downloading image:", error.message);
   }
 };
 
@@ -117,10 +78,9 @@ const startNextSong = async () => {
     return;
   }
 
-  const { songName, singerName, songImageUrl, songDurationSec } =
-    songList[index];
+  const { songName, singerName, songDurationSec } = songList[index];
 
-  const res = await getDownloadLink(songName, singerName, songDurationSec);
+  const res = await getDownloadLink(songName, singerName);
 
   if (res) {
     const { songDownloadUrl, songTitleFound } = res;
@@ -136,9 +96,10 @@ const startNextSong = async () => {
     await downloadSong(
       songName,
       singerName,
-      songImageUrl,
+      // songImageUrl,
       songDownloadUrl,
-      songTitleFound
+      songTitleFound,
+      songDurationSec
     );
   } else {
     console.log(
